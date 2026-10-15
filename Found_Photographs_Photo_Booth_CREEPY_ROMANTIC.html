@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#171512" />
+<title>Found Photographs — Tyler & Julie</title>
+<style>
+  :root{
+    --ink:#171312;
+    --paper:#f2eadf;
+    --paper-2:#ded0bf;
+    --card:#f8f1e7;
+    --muted:#766b62;
+    --line:rgba(28,17,18,.20);
+    --red:#7f1d2d;
+    --blood:#5f101c;
+    --plum:#2f1b2b;
+    --night:#0d0b0d;
+    --gold:#a77a3c;
+    --shadow:0 24px 70px rgba(18,15,11,.18);
+    --radius:28px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 50% -10%, rgba(127,29,45,.30), transparent 34%),
+      radial-gradient(circle at 10% 30%, rgba(72,43,68,.22), transparent 28%),
+      radial-gradient(circle at 90% 24%, rgba(95,16,28,.16), transparent 28%),
+      repeating-linear-gradient(90deg, rgba(255,255,255,.012) 0 1px, transparent 1px 5px),
+      var(--night);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    min-height:100vh;
+    position:relative;
+  }
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(ellipse at center,transparent 35%,rgba(0,0,0,.58) 100%)}
+  body::after{content:"☾     ✦     ♡     ✧     ☾";position:fixed;left:0;right:0;bottom:10px;text-align:center;letter-spacing:2.4em;color:rgba(255,245,235,.10);font-family:Georgia,serif;font-size:18px;pointer-events:none;z-index:-1}
+  button,input,textarea{font:inherit}
+  button{cursor:pointer}
+  .shell{max-width:1220px;margin:0 auto;padding:20px clamp(14px,3vw,34px) 64px}
+  .ticker{
+    overflow:hidden;border:1px solid rgba(255,255,255,.12);border-left:0;border-right:0;
+    margin:0 calc(-1 * clamp(14px,3vw,34px));
+    background:rgba(14,10,13,.72);backdrop-filter: blur(12px);color:#f4e9df;
+  }
+  .ticker-track{display:flex;gap:48px;white-space:nowrap;padding:10px 0;animation:ticker 28s linear infinite;font-size:12px;letter-spacing:.18em}
+  @keyframes ticker{to{transform:translateX(-50%)}}
+  .hero{display:grid;grid-template-columns:1.12fr .88fr;gap:28px;align-items:end;padding:54px 0 34px}
+  .eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#c8b8ad;margin-bottom:18px}
+  h1{font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:clamp(54px,8vw,112px);line-height:.86;letter-spacing:-.055em;margin:0;max-width:850px;color:#f4eadf;text-shadow:0 12px 60px rgba(95,16,28,.35)}
+  .hero-copy{font-family:Georgia,"Times New Roman",serif;font-size:clamp(18px,2.2vw,28px);line-height:1.3;margin:18px 0 0;max-width:650px;color:#d8c9be}
+  .event-card{background:linear-gradient(145deg,rgba(248,241,231,.96),rgba(230,216,203,.93));border:1px solid rgba(255,255,255,.15);border-radius:24px;padding:22px;box-shadow:0 25px 90px rgba(0,0,0,.48);transform:rotate(1.1deg);position:relative;overflow:hidden}.event-card::after{content:'☾';position:absolute;right:16px;top:8px;font-family:Georgia,serif;font-size:82px;color:rgba(95,16,28,.08);transform:rotate(12deg)}
+  .event-card strong{font-family:Georgia,"Times New Roman",serif;font-size:28px;font-weight:500;display:block;margin-top:8px}
+  .countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:20px}
+  .countdown div{border-top:1px solid var(--line);padding-top:10px;text-align:center}
+  .countdown b{display:block;font-family:Georgia,"Times New Roman",serif;font-size:28px;font-weight:500}
+  .countdown span{font-size:9px;letter-spacing:.16em;color:var(--muted)}
+  .booth{display:grid;grid-template-columns:minmax(0,1.03fr) minmax(340px,.97fr);gap:24px;align-items:start}
+  .panel{background:linear-gradient(180deg,rgba(248,241,231,.97),rgba(236,224,211,.95));border:1px solid rgba(255,255,255,.10);border-radius:var(--radius);box-shadow:0 30px 100px rgba(0,0,0,.48);overflow:hidden;position:relative}.panel::before{content:'✦';position:absolute;right:18px;top:12px;color:rgba(95,16,28,.12);font-size:28px;font-family:Georgia,serif;pointer-events:none}
+  .preview-panel{position:sticky;top:16px}
+  .panel-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.08);background:linear-gradient(90deg,#171114,#2a151e);color:#f4eadf}
+  .panel-head .label{font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:#d8c7bb}
+  .rec{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.14em}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--red);box-shadow:0 0 0 5px rgba(164,42,42,.09);animation:pulse 1.4s ease-in-out infinite}
+  @keyframes pulse{50%{opacity:.35}}
+  .stage{padding:16px;background:radial-gradient(circle at 50% 10%,#332028,#140f12 62%,#090809)}
+  .canvas-wrap{position:relative;aspect-ratio:4/5;max-height:74vh;margin:auto;background:#eee;overflow:hidden;border-radius:18px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+  canvas{display:block;width:100%;height:100%;object-fit:contain;background:#e9e3d8}
+  .empty-state{position:absolute;inset:0;display:grid;place-items:center;padding:38px;text-align:center;color:#463e36;background:linear-gradient(145deg,#f7f0e7,#ded2c2)}
+  .empty-state.hidden{display:none}
+  .empty-mark{font-family:Georgia,"Times New Roman",serif;font-size:62px;line-height:1;margin-bottom:18px}
+  .empty-title{font-family:Georgia,"Times New Roman",serif;font-size:28px;margin-bottom:8px}
+  .empty-state p{max-width:360px;margin:0 auto;color:#6d6258;line-height:1.45;font-size:13px}
+  .preview-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 16px 16px;background:linear-gradient(90deg,#140f12,#25151c)}
+  .controls{padding:8px 18px 22px}
+  .section{padding:18px 2px;border-bottom:1px solid var(--line)}
+  .section:last-child{border-bottom:0}
+  .step{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}
+  .step-num{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;flex:0 0 auto;font-size:11px}
+  .step h3{font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:22px;margin:2px 0 2px}
+  .step p{margin:0;color:var(--muted);font-size:11px;line-height:1.4}
+  .source-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .btn,.file-label{
+    min-height:48px;border-radius:999px;border:1px solid var(--ink);background:transparent;color:var(--ink);
+    display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:0 18px;font-size:12px;letter-spacing:.06em;transition:.2s ease;text-decoration:none;
+  }
+  .btn:hover,.file-label:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(0,0,0,.08)}
+  .btn.primary{background:linear-gradient(135deg,#4f101d,#7f1d2d);color:#fff7ef;border-color:#6d1725;box-shadow:0 12px 30px rgba(95,16,28,.18)}
+  .btn.light{background:var(--paper);border-color:var(--paper);color:var(--ink)}
+  .btn.ghost{border-color:rgba(255,255,255,.35);color:#fff}
+  .btn.danger{border-color:#7f2020;color:#7f2020}
+  .btn:disabled{opacity:.42;cursor:not-allowed;transform:none;box-shadow:none}
+  input[type=file]{display:none}
+  .chips{display:flex;gap:8px;overflow:auto;padding:2px 2px 6px;scrollbar-width:thin}
+  .chip{white-space:nowrap;border:1px solid var(--line);background:#fffaf3;border-radius:999px;padding:10px 13px;font-size:11px;color:#4e473f;transition:.15s}
+  .chip.active{background:linear-gradient(135deg,#2a151e,#6d1725);border-color:#6d1725;color:#fff6ec}
+  .chip:hover{border-color:rgba(23,21,18,.45)}
+  .fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .field{display:flex;flex-direction:column;gap:7px}
+  .field.full{grid-column:1/-1}
+  label.meta{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  input[type=text],textarea{
+    width:100%;border:1px solid var(--line);background:rgba(255,255,255,.64);border-radius:14px;padding:13px 14px;outline:none;color:var(--ink);font-size:13px;
+  }
+  textarea{min-height:84px;resize:vertical;line-height:1.45}
+  input:focus,textarea:focus{border-color:rgba(23,21,18,.55);box-shadow:0 0 0 4px rgba(23,21,18,.05)}
+  .char{font-size:10px;color:var(--muted);text-align:right;margin-top:4px}
+  .status-bar{display:flex;gap:10px;align-items:flex-start;padding:14px;border:1px dashed var(--line);border-radius:16px;background:rgba(255,255,255,.35);font-size:11px;line-height:1.45;color:var(--muted)}
+  .status-bar strong{color:var(--ink);display:block;margin-bottom:2px}
+  .submit-row{display:grid;grid-template-columns:1fr;gap:10px;margin-top:14px}
+  .camera-modal{position:fixed;inset:0;background:rgba(14,12,10,.94);z-index:50;display:none;align-items:center;justify-content:center;padding:18px}
+  .camera-modal.open{display:flex}
+  .camera-card{width:min(860px,100%);height:min(780px,92vh);display:grid;grid-template-rows:auto 1fr auto;background:#090709;border:1px solid rgba(255,255,255,.13);border-radius:28px;overflow:hidden;box-shadow:0 0 0 1px rgba(127,29,45,.2),0 40px 120px rgba(0,0,0,.65)}
+  .camera-top{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;color:#fff;border-bottom:1px solid rgba(255,255,255,.12)}
+  .camera-top span{font-size:11px;letter-spacing:.15em}
+  .camera-top button{background:none;color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:9px 13px}
+  .video-wrap{position:relative;overflow:hidden;background:#000;display:grid;place-items:center}
+  video{width:100%;height:100%;object-fit:cover}
+  .countdown-overlay{position:absolute;inset:0;display:none;place-items:center;background:rgba(0,0,0,.18);color:#fff;font-family:Georgia,"Times New Roman",serif;font-size:min(28vw,180px);text-shadow:0 6px 24px rgba(0,0,0,.4)}
+  .countdown-overlay.show{display:grid}
+  .camera-bottom{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:18px;background:#080808}
+  .camera-bottom .left{justify-self:start}.camera-bottom .right{justify-self:end}
+  .capture{width:78px;height:78px;border-radius:50%;border:7px solid #fff;background:#fff;box-shadow:inset 0 0 0 4px #111}
+  .camera-bottom button:not(.capture){border:1px solid rgba(255,255,255,.3);background:none;color:#fff;border-radius:999px;padding:10px 14px}
+  .flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:80}
+  .flash.go{animation:flash .42s ease}
+  @keyframes flash{0%{opacity:0}30%{opacity:1}100%{opacity:0}}
+  .toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);background:var(--ink);color:var(--paper);padding:12px 16px;border-radius:999px;font-size:11px;opacity:0;pointer-events:none;transition:.25s;z-index:100;box-shadow:0 16px 50px rgba(0,0,0,.22)}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  .footer{padding:70px 0 14px;text-align:center;color:#f1e5da}
+  .footer .big{font-family:Georgia,"Times New Roman",serif;font-size:clamp(38px,6vw,76px);line-height:.95;letter-spacing:-.04em}
+  .footer p{color:#bca99d;max-width:620px;margin:16px auto 0;line-height:1.6;font-size:12px}
+  .footer .sig{margin-top:28px;letter-spacing:.18em;font-size:10px}
+  .tiny{font-size:10px;color:var(--muted);line-height:1.45}
+  .kbd{display:inline-block;padding:2px 6px;border:1px solid var(--line);border-radius:5px;background:#fff;font-size:9px}
+  @media(max-width:920px){
+    .hero{grid-template-columns:1fr}.event-card{transform:none;max-width:560px}.booth{grid-template-columns:1fr}.preview-panel{position:relative;top:auto}.canvas-wrap{max-height:none}.preview-panel{order:1}.controls-panel{order:2}
+  }
+  @media(max-width:620px){
+    .shell{padding-left:10px;padding-right:10px}.hero{padding-top:38px}.panel{border-radius:22px}.fields,.source-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.preview-actions{grid-template-columns:1fr}.countdown b{font-size:21px}.camera-card{height:100%;border-radius:18px}.camera-modal{padding:8px}.capture{width:68px;height:68px}
+  }
+  @media(prefers-reduced-motion:reduce){.ticker-track,.dot{animation:none}*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="flash" id="flash"></div>
+<div class="toast" id="toast"></div>
+<div class="shell">
+  <div class="ticker" aria-hidden="true"><div class="ticker-track">
+    <span>● THE WEDDING ARCHIVE · 10.24.26</span><span>FOUND PHOTOGRAPHS · TYLER & JULIE</span><span>LOVE · LAUGHTER · LITTLE FRIGHTS</span><span>● THE WEDDING ARCHIVE · 10.24.26</span><span>FOUND PHOTOGRAPHS · TYLER & JULIE</span><span>LOVE · LAUGHTER · LITTLE FRIGHTS</span>
+  </div></div>
+
+  <header class="hero">
+    <div>
+      <div class="eyebrow">Guest Photo Booth · Tyler & Julie · October 24, 2026</div>
+      <h1>Found<br>Photographs.</h1>
+      <p class="hero-copy">Love. Laughter. Little frights. Leave behind a photograph worth haunting Tyler & Julie’s wedding archive forever.</p>
+    </div>
+    <aside class="event-card">
+      <span class="tiny">THE ARCHIVE OPENS</span>
+      <strong>October 24, 2026</strong>
+      <div class="countdown" id="countdown">
+        <div><b id="days">00</b><span>DAYS</span></div><div><b id="hours">00</b><span>HOURS</span></div><div><b id="minutes">00</b><span>MIN</span></div><div><b id="seconds">00</b><span>SEC</span></div>
+      </div>
+      <p class="tiny" id="archiveStatus" style="margin:16px 0 0">Preview mode is open now. Make and download a keepsake; collection stays closed until the wedding.</p>
+    </aside>
+  </header>
+
+  <main class="booth">
+    <section class="panel preview-panel">
+      <div class="panel-head"><span class="label">Photo 01 / Your Keepsake</span><span class="rec"><span class="dot"></span> LIVE PREVIEW</span></div>
+      <div class="stage">
+        <div class="canvas-wrap">
+          <canvas id="canvas" width="1600" height="2000" aria-label="Keepsake preview"></canvas>
+          <div class="empty-state" id="emptyState">
+            <div><div class="empty-mark">✧</div><div class="empty-title">You were here.<br>We want proof.</div><p>Choose a photo or open the camera. Your frame, filter, names and caption update here instantly.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="preview-actions">
+        <button class="btn light" id="downloadBtn" disabled>↓ Download keepsake</button>
+        <button class="btn ghost" id="resetBtn">↺ Start over</button>
+      </div>
+    </section>
+
+    <section class="panel controls-panel">
+      <div class="controls">
+        <div class="section">
+          <div class="step"><div class="step-num">01</div><div><h3>Add your photo</h3><p>Upload one, use your phone camera, or open the full photo booth camera.</p></div></div>
+          <div class="source-grid">
+            <label class="file-label" for="fileInput">↑ Choose photo</label>
+            <button class="btn primary" id="openCameraBtn">◉ Open camera</button>
+          </div>
+          <input id="fileInput" type="file" accept="image/*" />
+          <input id="quickCameraInput" type="file" accept="image/*" capture="user" />
+          <div style="margin-top:10px;display:flex;justify-content:center"><button class="btn" id="quickCameraBtn" style="min-height:38px">Use phone camera instead</button></div>
+        </div>
+
+        <div class="section">
+          <div class="step"><div class="step-num">02</div><div><h3>Pick your personality</h3><p>Cute, creepy, Halloween, or classic — every frame is baked into the final photo.</p></div></div>
+          <div class="chips" id="frameChips"></div>
+        </div>
+
+        <div class="section">
+          <div class="step"><div class="step-num">03</div><div><h3>Set the mood</h3><p>Go romantic, vintage, candlelit, haunted, blood-moon red, or midnight-dark. Change it anytime.</p></div></div>
+          <div class="chips" id="filterChips"></div>
+        </div>
+
+        <div class="section">
+          <div class="step"><div class="step-num">04</div><div><h3>Make it personal</h3><p>Your name is required only for collection. It can stay off the photo.</p></div></div>
+          <div class="fields">
+            <div class="field"><label class="meta" for="nameInput">Your name</label><input id="nameInput" type="text" maxlength="45" placeholder="Required on wedding day" /></div>
+            <div class="field"><label class="meta" for="peopleInput">Who else is in the photo?</label><input id="peopleInput" type="text" maxlength="70" placeholder="Optional" /></div>
+            <div class="field full"><label class="meta" for="captionInput">On-photo caption</label><input id="captionInput" type="text" maxlength="100" placeholder="A caption on the photo" /><div class="char"><span id="captionCount">0</span> / 100</div></div>
+            <div class="field full"><label class="meta" for="noteInput">A note for Tyler & Julie</label><textarea id="noteInput" maxlength="800" placeholder="A wish for you · A favorite memory · A little advice"></textarea><div class="char"><span id="noteCount">0</span> / 800</div></div>
+          </div>
+          <p class="tiny" style="margin:10px 0 0">Long notes get their own keepsake card so every word stays readable.</p>
+        </div>
+
+        <div class="section">
+          <div class="status-bar"><span>◌</span><div><strong id="modeTitle">Preview only</strong><span id="modeCopy">Your photo stays on this device and is not sent to the couple. Download anything you make.</span></div></div>
+          <div class="submit-row"><button class="btn primary" id="submitBtn" disabled>Wedding uploads not open yet</button></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="big">The night ends.<br>The evidence remains.</div>
+    <p>All your favorite people. All their beautiful, ridiculous memories. Keep one for yourself; leave one in the archive when collection opens.</p>
+    <div class="sig">✧ TYLER & JULIE HAWTHORNE · FOUND PHOTOGRAPHS · FOREVER MEMORIES · 10.24.26</div>
+  </footer>
+</div>
+
+<div class="camera-modal" id="cameraModal" aria-hidden="true">
+  <div class="camera-card">
+    <div class="camera-top"><span>FOUND PHOTOGRAPHS · CAMERA</span><button id="closeCameraBtn">Close</button></div>
+    <div class="video-wrap"><video id="video" autoplay muted playsinline></video><div class="countdown-overlay" id="countdownOverlay">3</div></div>
+    <div class="camera-bottom"><div class="left"><button id="flipCameraBtn">↻ Flip</button></div><button class="capture" id="captureBtn" aria-label="Take photo"></button><div class="right"><button id="timerBtn">3s timer: On</button></div></div>
+  </div>
+</div>
+
+<script>
+(() => {
+  'use strict';
+
+  // Production collection adapter. Leave blank for preview-only mode.
+  // When ready, set this to a secure endpoint that accepts multipart FormData.
+  const SUBMISSION_ENDPOINT = '';
+  const EVENT_TIME = new Date('2026-10-24T17:00:00-04:00').getTime();
+
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const emptyState = document.getElementById('emptyState');
+  const fileInput = document.getElementById('fileInput');
+  const quickCameraInput = document.getElementById('quickCameraInput');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const captionInput = document.getElementById('captionInput');
+  const noteInput = document.getElementById('noteInput');
+  const nameInput = document.getElementById('nameInput');
+  const peopleInput = document.getElementById('peopleInput');
+  const submitBtn = document.getElementById('submitBtn');
+  const toastEl = document.getElementById('toast');
+
+  const cameraModal = document.getElementById('cameraModal');
+  const video = document.getElementById('video');
+  const countdownOverlay = document.getElementById('countdownOverlay');
+  const flash = document.getElementById('flash');
+  let stream = null;
+  let facingMode = 'user';
+  let timerOn = true;
+
+  const state = {
+    img: null,
+    imgDataUrl: '',
+    frame: 'classic',
+    filter: 'original',
+    objectUrl: null
+  };
+
+  const frames = [
+    ['classic','♡ Cute & classic'],['spooky','☾ A little spooky'],['tildeath','⚰ Till death'],['bats','🦇 Bat swarm'],['web','🕸 Haunted web'],['gothic','✦ Gothic romance'],['ghosts','◌ Little ghosts'],['moon','☾ Blood moon'],['polaroid','♡ Polaroid'],['hearts','♥ Little hearts'],['flowers','✿ Wildflowers'],['golden','✧ Golden hour'],['clean','✦ Clean up nice'],['bow','୨୧ Tied with love'],['cake','♜ Here for cake'],['none','▢ No frame']
+  ];
+  const filters = [
+    ['original','Original'],['bw','B&W'],['hauntedbw','Haunted B&W'],['warm','Warm'],['candle','Candlelight'],['vintage','Vintage'],['glow','Soft glow'],['film','Film'],['bloodmoon','Blood moon'],['midnight','Midnight']
+  ];
+
+  function makeChips(containerId, items, kind){
+    const wrap = document.getElementById(containerId);
+    wrap.innerHTML = '';
+    items.forEach(([key,label]) => {
+      const b = document.createElement('button');
+      b.className = 'chip' + (state[kind] === key ? ' active' : '');
+      b.textContent = label;
+      b.type = 'button';
+      b.onclick = () => { state[kind] = key; makeChips(containerId, items, kind); render(); };
+      wrap.appendChild(b);
+    });
+  }
+
+  function showToast(message){
+    toastEl.textContent = message;
+    toastEl.classList.add('show');
+    clearTimeout(showToast.t);
+    showToast.t = setTimeout(() => toastEl.classList.remove('show'), 2400);
+  }
+
+  function loadImageFromFile(file){
+    if(!file || !file.type.startsWith('image/')){ showToast('Please choose an image file.'); return; }
+    if(file.size > 20 * 1024 * 1024){ showToast('That photo is very large. Try one under 20 MB.'); return; }
+    if(state.objectUrl) URL.revokeObjectURL(state.objectUrl);
+    state.objectUrl = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      state.img = img;
+      emptyState.classList.add('hidden');
+      downloadBtn.disabled = false;
+      render();
+      showToast('Photo ready. Make it yours.');
+    };
+    img.onerror = () => showToast('That image could not be opened.');
+    img.src = state.objectUrl;
+  }
+
+  function setFilter(){
+    const map = {
+      original:'none',
+      bw:'grayscale(1) contrast(1.08)',
+      hauntedbw:'grayscale(1) contrast(1.34) brightness(.86)',
+      warm:'sepia(.22) saturate(1.12) contrast(1.02)',
+      candle:'sepia(.32) saturate(1.18) brightness(.97) contrast(1.04)',
+      vintage:'sepia(.34) saturate(.82) contrast(1.05) brightness(.96)',
+      glow:'brightness(1.06) saturate(.9) contrast(.94)',
+      film:'saturate(.78) contrast(1.12) brightness(.96)',
+      bloodmoon:'sepia(.28) saturate(1.38) hue-rotate(318deg) contrast(1.1) brightness(.88)',
+      midnight:'saturate(.64) contrast(1.18) brightness(.74) hue-rotate(10deg)'
+    };
+    ctx.filter = map[state.filter] || 'none';
+  }
+
+  function coverDraw(img,x,y,w,h){
+    const ir = img.width / img.height, tr = w / h;
+    let sx=0, sy=0, sw=img.width, sh=img.height;
+    if(ir > tr){ sw = img.height * tr; sx = (img.width - sw)/2; }
+    else { sh = img.width / tr; sy = (img.height - sh)/2; }
+    ctx.drawImage(img,sx,sy,sw,sh,x,y,w,h);
+  }
+
+  function serif(size, weight=500){ ctx.font = `${weight} ${size}px Georgia, 'Times New Roman', serif`; }
+  function mono(size, weight=500){ ctx.font = `${weight} ${size}px ui-monospace, SFMono-Regular, Menlo, monospace`; }
+
+  function drawGrain(x,y,w,h,amount=.04){
+    ctx.save(); ctx.globalAlpha = amount;
+    const count = Math.min(3800, Math.round((w*h)/2200));
+    ctx.fillStyle = '#000';
+    for(let i=0;i<count;i++){
+      const px=x+Math.random()*w, py=y+Math.random()*h, s=Math.random()*2.5+.3;
+      ctx.fillRect(px,py,s,s);
+    }
+    ctx.restore();
+  }
+
+  function heart(x,y,s,fill='#fff'){
+    ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.fillStyle=fill;ctx.beginPath();ctx.moveTo(0,3);ctx.bezierCurveTo(-7,-4,-13,4,0,15);ctx.bezierCurveTo(13,4,7,-4,0,3);ctx.fill();ctx.restore();
+  }
+
+  function bat(x,y,s,rot=0){
+    ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.scale(s,s);ctx.fillStyle='#120b10';ctx.beginPath();
+    ctx.moveTo(0,4);ctx.quadraticCurveTo(-8,-5,-18,2);ctx.quadraticCurveTo(-26,-5,-34,3);ctx.quadraticCurveTo(-25,16,-10,13);
+    ctx.quadraticCurveTo(-4,13,0,22);ctx.quadraticCurveTo(4,13,10,13);ctx.quadraticCurveTo(25,16,34,3);ctx.quadraticCurveTo(26,-5,18,2);ctx.quadraticCurveTo(8,-5,0,4);ctx.fill();ctx.restore();
+  }
+  function ghost(x,y,s){
+    ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.fillStyle='rgba(255,248,239,.92)';ctx.beginPath();ctx.arc(0,0,22,Math.PI,0);ctx.lineTo(22,34);ctx.quadraticCurveTo(14,27,8,34);ctx.quadraticCurveTo(0,27,-8,34);ctx.quadraticCurveTo(-14,27,-22,34);ctx.closePath();ctx.fill();
+    ctx.fillStyle='#27161e';ctx.beginPath();ctx.arc(-7,-3,3,0,Math.PI*2);ctx.arc(7,-3,3,0,Math.PI*2);ctx.fill();ctx.restore();
+  }
+  function spiderWeb(cx,cy,r,flip=1){
+    ctx.save();ctx.strokeStyle='rgba(250,241,231,.86)';ctx.lineWidth=3;ctx.globalAlpha=.9;ctx.translate(cx,cy);ctx.scale(flip,1);
+    for(let i=0;i<7;i++){const a=i*Math.PI/12;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r);ctx.stroke()}
+    for(let rr=r*.2;rr<=r;rr+=r*.18){ctx.beginPath();for(let i=0;i<=7;i++){const a=i*Math.PI/12;const x=Math.cos(a)*rr,y=Math.sin(a)*rr;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke()}
+    ctx.restore();
+  }
+  function vignette(strength=.34){
+    const g=ctx.createRadialGradient(canvas.width/2,canvas.height/2,canvas.width*.18,canvas.width/2,canvas.height/2,canvas.height*.7);
+    g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,`rgba(10,4,8,${strength})`);ctx.fillStyle=g;ctx.fillRect(0,0,canvas.width,canvas.height);
+  }
+
+  function drawFrameDecor(frame, inset){
+    const W=canvas.width,H=canvas.height;
+    ctx.save();ctx.filter='none';
+    if(frame==='none'){ctx.restore();return;}
+
+    if(frame==='classic'){
+      ctx.strokeStyle='rgba(255,255,255,.95)';ctx.lineWidth=5;ctx.strokeRect(inset,inset,W-inset*2,H-inset*2);
+      serif(48);ctx.fillStyle='#fff';ctx.textAlign='center';ctx.fillText('Tyler & Julie',W/2,110);
+      mono(22);ctx.fillText('10 · 24 · 2026',W/2,H-82);
+    }
+    if(frame==='spooky'){
+      ctx.strokeStyle='rgba(247,240,231,.88)';ctx.lineWidth=4;ctx.strokeRect(inset,inset,W-inset*2,H-inset*2);
+      serif(62);ctx.fillStyle='#f7f0e7';ctx.textAlign='center';ctx.fillText('till death, etc.',W/2,118);
+      ctx.font='62px Georgia';ctx.fillText('☾',120,H-92);ctx.fillText('☾',W-120,H-92);
+      mono(22);ctx.fillText('TYLER + JULIE · 10.24.26',W/2,H-84);
+    }
+    if(frame==='tildeath'){
+      ctx.strokeStyle='rgba(245,235,225,.93)';ctx.lineWidth=4;ctx.strokeRect(52,52,W-104,H-104);
+      ctx.strokeStyle='rgba(127,29,45,.92)';ctx.lineWidth=10;ctx.strokeRect(68,68,W-136,H-136);
+      serif(78);ctx.fillStyle='#fff4e9';ctx.textAlign='center';ctx.fillText('TILL DEATH',W/2,122);
+      serif(42);ctx.fillText('DO US PARTY',W/2,175);mono(20);ctx.fillText('TYLER + JULIE · 10.24.26',W/2,H-72);
+      ctx.font='76px Georgia';ctx.fillText('⚰',115,H-90);ctx.fillText('⚰',W-115,H-90);
+    }
+    if(frame==='bats'){
+      vignette(.22);for(let i=0;i<13;i++){const x=70+(i%5)*350+(i%2)*60,y=90+(i%4)*130;bat(x,y,1.35+(i%3)*.25,(i%4-.5)*.08)}
+      serif(62);ctx.fillStyle='#fff5ea';ctx.textAlign='center';ctx.fillText('love bites',W/2,115);mono(20);ctx.fillText('TYLER + JULIE · 10.24.26',W/2,H-74);
+    }
+    if(frame==='web'){
+      spiderWeb(0,0,470,1);spiderWeb(W,0,470,-1);spiderWeb(0,H,420,1);spiderWeb(W,H,420,-1);
+      serif(62);ctx.fillStyle='#fff5ea';ctx.textAlign='center';ctx.fillText('caught in love',W/2,118);mono(20);ctx.fillText('FOUND PHOTOGRAPHS · 10.24.26',W/2,H-72);
+    }
+    if(frame==='gothic'){
+      ctx.fillStyle='rgba(25,11,18,.28)';ctx.fillRect(0,0,W,150);ctx.fillRect(0,H-170,W,170);
+      ctx.strokeStyle='rgba(234,220,207,.92)';ctx.lineWidth=4;ctx.strokeRect(56,56,W-112,H-112);
+      ctx.strokeStyle='rgba(127,29,45,.78)';ctx.lineWidth=3;ctx.strokeRect(72,72,W-144,H-144);
+      serif(64);ctx.fillStyle='#f6eade';ctx.textAlign='center';ctx.fillText('a love to die for',W/2,105);mono(20);ctx.fillText('TYLER + JULIE · FOREVER, PROBABLY',W/2,H-91);
+      ctx.font='50px Georgia';ctx.fillText('✦  ☾  ✦',W/2,H-43);
+    }
+    if(frame==='ghosts'){
+      ghost(95,135,1.4);ghost(W-95,170,1.15);ghost(115,H-155,1.1);ghost(W-115,H-150,1.4);
+      serif(60);ctx.fillStyle='#fff6ed';ctx.textAlign='center';ctx.fillText('boo, we got married',W/2,112);mono(20);ctx.fillText('10.24.26',W/2,H-76);
+    }
+    if(frame==='moon'){
+      vignette(.32);ctx.save();ctx.fillStyle='rgba(116,19,34,.92)';ctx.beginPath();ctx.arc(W-145,145,86,0,Math.PI*2);ctx.fill();ctx.globalCompositeOperation='destination-out';ctx.beginPath();ctx.arc(W-112,120,78,0,Math.PI*2);ctx.fill();ctx.restore();
+      ctx.strokeStyle='rgba(245,233,222,.86)';ctx.lineWidth=4;ctx.strokeRect(58,58,W-116,H-116);
+      serif(64);ctx.fillStyle='#fff4ea';ctx.textAlign='left';ctx.fillText('under the blood moon',84,H-118);mono(20);ctx.fillText('TYLER + JULIE · 10.24.26',86,H-76);
+    }
+    if(frame==='polaroid'){
+      ctx.fillStyle='rgba(248,244,236,.97)';ctx.fillRect(0,0,W,96);ctx.fillRect(0,H-250,W,250);ctx.fillRect(0,0,72,H);ctx.fillRect(W-72,0,72,H);
+      serif(72);ctx.fillStyle='#1d1915';ctx.textAlign='center';ctx.fillText('found photographs',W/2,H-126);
+      mono(20);ctx.fillText('TYLER & JULIE · 10.24.26',W/2,H-74);
+    }
+    if(frame==='hearts'){
+      for(let i=0;i<18;i++){ const yy=100+i*100; heart(78,yy,1.8,i%2?'#fff':'#f3d9dc'); heart(W-78,yy,1.8,i%2?'#f3d9dc':'#fff'); }
+      serif(52);ctx.fillStyle='#fff';ctx.textAlign='center';ctx.fillText('love looks good on you',W/2,112);
+      mono(21);ctx.fillText('TYLER ♥ JULIE · 10.24.26',W/2,H-78);
+    }
+    if(frame==='flowers'){
+      const blooms=[[90,90],[W-90,105],[92,H-105],[W-95,H-96]];
+      blooms.forEach(([bx,by],bi)=>{for(let k=0;k<7;k++){ctx.save();ctx.translate(bx,by);ctx.rotate(k*Math.PI/3.5);ctx.fillStyle=bi%2?'#f5e2c7':'#fff7e9';ctx.beginPath();ctx.ellipse(0,-22,12,27,0,0,Math.PI*2);ctx.fill();ctx.restore()}ctx.fillStyle='#b58749';ctx.beginPath();ctx.arc(bx,by,10,0,Math.PI*2);ctx.fill()});
+      serif(54);ctx.fillStyle='#fff';ctx.textAlign='center';ctx.fillText('wildly in love',W/2,112);mono(21);ctx.fillText('10.24.26',W/2,H-78);
+    }
+    if(frame==='golden'){
+      const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'#f0c56d');g.addColorStop(.5,'#fff1c6');g.addColorStop(1,'#bd8a35');ctx.strokeStyle=g;ctx.lineWidth=12;ctx.strokeRect(46,46,W-92,H-92);
+      ctx.fillStyle='#ffe5a0';serif(60);ctx.textAlign='center';ctx.fillText('golden hour',W/2,120);mono(21);ctx.fillText('TYLER + JULIE · 10.24.26',W/2,H-76);
+    }
+    if(frame==='clean'){
+      ctx.fillStyle='rgba(255,255,255,.94)';ctx.fillRect(0,H-158,W,158);ctx.fillStyle='#171512';ctx.textAlign='left';serif(52);ctx.fillText('Tyler & Julie',70,H-86);mono(20);ctx.fillText('FOUND PHOTOGRAPHS · 10.24.26',72,H-48);
+    }
+    if(frame==='bow'){
+      ctx.strokeStyle='rgba(255,255,255,.9)';ctx.lineWidth=4;ctx.strokeRect(60,60,W-120,H-120);
+      serif(70);ctx.fillStyle='#fff';ctx.textAlign='center';ctx.fillText('୨୧',W/2,122);serif(50);ctx.fillText('tied with love',W/2,H-106);mono(20);ctx.fillText('10.24.26',W/2,H-70);
+    }
+    if(frame==='cake'){
+      ctx.fillStyle='rgba(255,250,243,.92)';ctx.fillRect(0,0,W,116);ctx.fillRect(0,H-130,W,130);ctx.fillStyle='#171512';ctx.textAlign='center';serif(54);ctx.fillText('HERE FOR LOVE. STAYED FOR CAKE.',W/2,76);mono(20);ctx.fillText('TYLER + JULIE · 10.24.26',W/2,H-72);
+    }
+    ctx.restore();
+  }
+
+  function wrapText(text,maxWidth,fontSize,lineHeight){
+    const words=text.trim().split(/\s+/);const lines=[];let line='';
+    serif(fontSize);
+    words.forEach(w=>{const test=line?line+' '+w:w;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=w}else line=test});
+    if(line)lines.push(line);return {lines,lineHeight};
+  }
+
+  function render(){
+    const W=canvas.width,H=canvas.height;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#e6ddd0';ctx.fillRect(0,0,W,H);
+    if(!state.img) return;
+
+    setFilter();
+    coverDraw(state.img,0,0,W,H);
+    ctx.filter='none';
+
+    if(state.filter==='glow'){
+      ctx.save();ctx.globalCompositeOperation='screen';ctx.globalAlpha=.13;ctx.fillStyle='#fff1df';ctx.fillRect(0,0,W,H);ctx.restore();
+    }
+    if(state.filter==='film') drawGrain(0,0,W,H,.055);
+    if(state.filter==='hauntedbw'){vignette(.32);drawGrain(0,0,W,H,.07)}
+    if(state.filter==='candle'){ctx.save();const g=ctx.createRadialGradient(W*.52,H*.38,40,W*.52,H*.38,H*.72);g.addColorStop(0,'rgba(255,196,112,.18)');g.addColorStop(1,'rgba(65,16,22,.18)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.restore()}
+    if(state.filter==='bloodmoon'){ctx.save();ctx.globalCompositeOperation='multiply';ctx.fillStyle='rgba(95,8,24,.18)';ctx.fillRect(0,0,W,H);ctx.restore();vignette(.28)}
+    if(state.filter==='midnight'){ctx.save();ctx.fillStyle='rgba(20,7,22,.18)';ctx.fillRect(0,0,W,H);ctx.restore();vignette(.42)}
+
+    const cap=captionInput.value.trim();
+    if(cap){
+      ctx.save();ctx.fillStyle='rgba(15,13,11,.54)';ctx.fillRect(0,H-330,W,128);ctx.fillStyle='#fff';ctx.textAlign='center';serif(54);const wrapped=wrapText(cap,W-180,54,62);wrapped.lines.slice(0,2).forEach((ln,i)=>ctx.fillText(ln,W/2,H-270+i*62));ctx.restore();
+    }
+
+    drawFrameDecor(state.frame,58);
+
+    // Tiny archival stamp
+    ctx.save();ctx.filter='none';ctx.globalAlpha=.92;ctx.fillStyle='rgba(15,13,11,.7)';ctx.fillRect(54,54,196,42);ctx.fillStyle='#fff';mono(18);ctx.textAlign='left';ctx.fillText('● FOUND / 10.24.26',70,82);ctx.restore();
+  }
+
+  function safeName(s){return (s||'guest').trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40)||'guest'}
+
+  function downloadDataUrl(dataUrl,filename){const a=document.createElement('a');a.href=dataUrl;a.download=filename;document.body.appendChild(a);a.click();a.remove();}
+
+  function makeNoteCard(){
+    const note=noteInput.value.trim();if(!note) return null;
+    const c=document.createElement('canvas');c.width=1600;c.height=2000;const x=c.getContext('2d');
+    x.fillStyle='#f6f0e7';x.fillRect(0,0,c.width,c.height);
+    x.strokeStyle='rgba(23,21,18,.25)';x.lineWidth=3;x.strokeRect(70,70,c.width-140,c.height-140);
+    x.fillStyle='#171512';x.textAlign='center';x.font='500 86px Georgia, serif';x.fillText('A note for Tyler & Julie',c.width/2,210);
+    x.font='500 24px ui-monospace, monospace';x.fillStyle='#6e665d';x.fillText('FOUND PHOTOGRAPHS · 10.24.26',c.width/2,270);
+    const max=1240;x.textAlign='left';x.fillStyle='#171512';x.font='500 52px Georgia, serif';
+    const words=note.split(/\s+/);const lines=[];let line='';for(const w of words){const test=line?line+' '+w:w;if(x.measureText(test).width>max&&line){lines.push(line);line=w}else line=test}if(line)lines.push(line);
+    const lh=72;let y=450;for(const ln of lines.slice(0,18)){x.fillText(ln,180,y);y+=lh}
+    const from=nameInput.value.trim();if(from){x.font='italic 46px Georgia, serif';x.fillText('— '+from,180,Math.min(1760,y+100));}
+    x.textAlign='center';x.font='500 24px ui-monospace, monospace';x.fillStyle='#6e665d';x.fillText('LOVE. LAUGHTER. FOUND PHOTOGRAPHS.',c.width/2,1870);
+    return c.toDataURL('image/png');
+  }
+
+  function downloadKeepsake(){
+    if(!state.img)return;
+    render();
+    const base=`tyler-julie-found-photo-${safeName(nameInput.value)}-${Date.now()}`;
+    downloadDataUrl(canvas.toDataURL('image/png'),base+'.png');
+    const note=makeNoteCard();
+    if(note) setTimeout(()=>downloadDataUrl(note,base+'-note.png'),280);
+    showToast(note?'Keepsake + note card downloaded.':'Keepsake downloaded.');
+  }
+
+  function resetAll(){
+    if(state.objectUrl){URL.revokeObjectURL(state.objectUrl);state.objectUrl=null}
+    state.img=null;state.frame='classic';state.filter='original';
+    fileInput.value='';quickCameraInput.value='';captionInput.value='';noteInput.value='';nameInput.value='';peopleInput.value='';
+    document.getElementById('captionCount').textContent='0';document.getElementById('noteCount').textContent='0';
+    emptyState.classList.remove('hidden');downloadBtn.disabled=true;makeChips('frameChips',frames,'frame');makeChips('filterChips',filters,'filter');render();showToast('Ready for another one.');
+  }
+
+  async function openCamera(){
+    if(!navigator.mediaDevices?.getUserMedia){ quickCameraInput.click(); return; }
+    try{
+      stopCamera();
+      stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:facingMode},width:{ideal:1920},height:{ideal:1080}},audio:false});
+      video.srcObject=stream;cameraModal.classList.add('open');cameraModal.setAttribute('aria-hidden','false');
+    }catch(err){
+      console.warn(err);showToast('Camera permission was blocked. Use “Choose photo” instead.');quickCameraInput.click();
+    }
+  }
+  function stopCamera(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}video.srcObject=null;cameraModal.classList.remove('open');cameraModal.setAttribute('aria-hidden','true')}
+  async function flipCamera(){facingMode=facingMode==='user'?'environment':'user';await openCamera()}
+  function snapFrame(){
+    const c=document.createElement('canvas');c.width=video.videoWidth||1280;c.height=video.videoHeight||720;const x=c.getContext('2d');
+    if(facingMode==='user'){x.translate(c.width,0);x.scale(-1,1)}x.drawImage(video,0,0,c.width,c.height);
+    const data=c.toDataURL('image/jpeg',.92);const img=new Image();img.onload=()=>{state.img=img;state.imgDataUrl=data;emptyState.classList.add('hidden');downloadBtn.disabled=false;render();flash.classList.remove('go');void flash.offsetWidth;flash.classList.add('go');stopCamera();showToast('Photo captured. Looking good.');};img.src=data;
+  }
+  async function capture(){
+    if(!timerOn){snapFrame();return}
+    countdownOverlay.classList.add('show');
+    for(const n of [3,2,1]){countdownOverlay.textContent=n;await new Promise(r=>setTimeout(r,700))}
+    countdownOverlay.textContent='✦';await new Promise(r=>setTimeout(r,180));countdownOverlay.classList.remove('show');snapFrame();
+  }
+
+  async function submitCollection(){
+    if(!state.img){showToast('Add a photo first.');return}
+    if(!nameInput.value.trim()){nameInput.focus();showToast('Add your name before submitting.');return}
+    if(!SUBMISSION_ENDPOINT){showToast('Collection endpoint is not connected yet. Your keepsake still downloads normally.');return}
+    submitBtn.disabled=true;submitBtn.textContent='Sending to the archive…';
+    try{
+      render();
+      const blob=await new Promise(r=>canvas.toBlob(r,'image/jpeg',.9));
+      const form=new FormData();form.append('photo',blob,'found-photograph.jpg');form.append('name',nameInput.value.trim());form.append('people',peopleInput.value.trim());form.append('caption',captionInput.value.trim());form.append('note',noteInput.value.trim());form.append('frame',state.frame);form.append('filter',state.filter);form.append('capturedAt',new Date().toISOString());
+      const res=await fetch(SUBMISSION_ENDPOINT,{method:'POST',body:form});if(!res.ok)throw new Error('Upload failed');
+      submitBtn.textContent='Saved to the wedding archive ♡';showToast('Your photo is in the archive.');
+    }catch(err){console.error(err);submitBtn.disabled=false;submitBtn.textContent='Try submitting again';showToast('Upload did not finish. Your photo is still safe on this screen.');}
+  }
+
+  function updateEventMode(){
+    const now=Date.now(),d=Math.max(0,EVENT_TIME-now);const day=Math.floor(d/864e5),hr=Math.floor(d%864e5/36e5),min=Math.floor(d%36e5/6e4),sec=Math.floor(d%6e4/1000);
+    document.getElementById('days').textContent=String(day).padStart(2,'0');document.getElementById('hours').textContent=String(hr).padStart(2,'0');document.getElementById('minutes').textContent=String(min).padStart(2,'0');document.getElementById('seconds').textContent=String(sec).padStart(2,'0');
+    const open=now>=EVENT_TIME;
+    const modeTitle=document.getElementById('modeTitle'), modeCopy=document.getElementById('modeCopy'), archiveStatus=document.getElementById('archiveStatus');
+    if(open){
+      archiveStatus.textContent=SUBMISSION_ENDPOINT?'The wedding archive is open. Take one for yourself and leave one here.':'The wedding day is here. Keepsakes work; archive upload still needs its secure endpoint connected.';
+      modeTitle.textContent=SUBMISSION_ENDPOINT?'Wedding archive open':'Wedding day preview';
+      modeCopy.textContent=SUBMISSION_ENDPOINT?'Your finished photo can be saved to Tyler & Julie’s archive after you approve it.':'Your photo stays on this device until the collection endpoint is connected.';
+      submitBtn.disabled=!SUBMISSION_ENDPOINT;submitBtn.textContent=SUBMISSION_ENDPOINT?'♡ Add this photo to the wedding archive':'Archive connection not configured';
+    }else{
+      modeTitle.textContent='Preview only';modeCopy.textContent='Your photo stays on this device and is not sent to the couple. Download anything you make.';submitBtn.disabled=true;submitBtn.textContent='Wedding uploads not open yet';
+    }
+  }
+
+  fileInput.addEventListener('change',e=>loadImageFromFile(e.target.files?.[0]));
+  quickCameraInput.addEventListener('change',e=>loadImageFromFile(e.target.files?.[0]));
+  document.getElementById('openCameraBtn').addEventListener('click',openCamera);
+  document.getElementById('quickCameraBtn').addEventListener('click',()=>quickCameraInput.click());
+  document.getElementById('closeCameraBtn').addEventListener('click',stopCamera);
+  document.getElementById('flipCameraBtn').addEventListener('click',flipCamera);
+  document.getElementById('captureBtn').addEventListener('click',capture);
+  document.getElementById('timerBtn').addEventListener('click',e=>{timerOn=!timerOn;e.currentTarget.textContent=`3s timer: ${timerOn?'On':'Off'}`});
+  downloadBtn.addEventListener('click',downloadKeepsake);resetBtn.addEventListener('click',resetAll);submitBtn.addEventListener('click',submitCollection);
+  captionInput.addEventListener('input',()=>{document.getElementById('captionCount').textContent=captionInput.value.length;render()});
+  noteInput.addEventListener('input',()=>document.getElementById('noteCount').textContent=noteInput.value.length);
+  window.addEventListener('beforeunload',stopCamera);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')stopCamera()});
+
+  makeChips('frameChips',frames,'frame');makeChips('filterChips',filters,'filter');updateEventMode();setInterval(updateEventMode,1000);render();
+})();
+</script>
+</body>
+</html>
