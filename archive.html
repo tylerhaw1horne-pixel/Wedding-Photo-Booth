@@ -1,14 +1,259 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Private archive · Tyler & Julie</title>
-<style>body{margin:0;background:#110d10;color:#f2e6d8;font:16px Georgia,serif}main{max-width:1100px;margin:auto;padding:36px 20px}h1{font-weight:400;font-size:48px}a{color:#ead1bb}button,input{font:inherit;padding:13px;border-radius:12px;border:1px solid #a98b7a}button{cursor:pointer;background:#702035;color:white}input{background:#f9f1e8;color:#20141b;display:block;box-sizing:border-box;width:100%;margin:12px 0}form{max-width:420px}#photos{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px}article{background:#f3e6d8;color:#251820;padding:16px;border-radius:16px}img{width:100%;border-radius:8px}article a{color:#702035}article button{margin:5px}p{line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}.toolbar{display:flex;gap:12px;flex-wrap:wrap;margin:24px 0}label{display:block}#status{min-height:25px}[hidden]{display:none!important}</style>
-<main><a href="/">← Back to the photo booth</a><h1>Our found photographs</h1><p>A private collection of the people we love.</p>
-<form id="login"><label>Email<input id="email" type="email" autocomplete="username" required></label><label>Password<input id="password" type="password" autocomplete="current-password" required></label><button>Open our archive</button></form>
-<p id="status" role="status" aria-live="polite"></p><section id="collection" hidden><div class="toolbar"><button id="refresh">Refresh</button><button id="showHidden">Show hidden photos</button><button id="logout">Sign out</button><a href="/">Test the booth</a></div><div id="photos"></div><button id="more" hidden>Load more</button></section></main>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Photo Archive · Tyler & Julie</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+  :root{--bg:#0d0a12;--card:#1a1420;--ink:#f5ead7;--muted:#a99fb3;--line:rgba(255,255,255,.12);--orange:#ff8a3d;--red:#e5484d}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  main{max-width:1200px;margin:auto;padding:24px 16px 120px}
+  a{color:var(--orange)}
+  h1{font-size:28px;margin:8px 0 4px}
+  .muted{color:var(--muted)}
+  button{font:inherit;cursor:pointer;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--ink);padding:9px 14px;border-radius:10px}
+  button:disabled{opacity:.5;cursor:default}
+  button.primary{background:var(--orange);border-color:var(--orange);color:#1a0f05;font-weight:700}
+  button.danger{color:var(--red);border-color:rgba(229,72,77,.4)}
+  button.danger.armed{background:var(--red);color:#fff;border-color:var(--red)}
+  button.on{background:var(--ink);color:var(--bg)}
+  form{max-width:380px;margin-top:20px}
+  label{display:block;font-size:13px;color:var(--muted);font-weight:600;margin-top:12px}
+  input[type=email],input[type=password]{display:block;width:100%;margin-top:6px;padding:13px;font:inherit;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--ink)}
+  form button{margin-top:16px;width:100%;padding:13px}
+  #status{min-height:22px;margin:12px 0}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:16px 0}
+  .toolbar .grow{flex:1}
+  #grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
+  .card{background:var(--card);border:2px solid transparent;border-radius:14px;overflow:hidden;position:relative}
+  .card.sel{border-color:var(--orange)}
+  .card img{display:block;width:100%;aspect-ratio:9/16;object-fit:cover;background:#000;cursor:zoom-in}
+  .check{position:absolute;top:8px;left:8px;width:30px;height:30px;border-radius:50%;padding:0;background:rgba(0,0,0,.55);border:2px solid #fff;color:#fff;font-weight:800;display:grid;place-items:center}
+  .card.sel .check{background:var(--orange);border-color:var(--orange);color:#1a0f05}
+  .fav{position:absolute;top:8px;right:8px;width:34px;height:34px;padding:0;border-radius:50%;background:rgba(0,0,0,.55);border:0;font-size:17px}
+  .meta{padding:10px 10px 4px}
+  .meta b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .meta small{color:var(--muted)}
+  .actions{display:grid;grid-template-columns:2fr 1fr 1fr;gap:6px;padding:8px 10px 10px}
+  .actions button{padding:8px 2px;font-size:13px;white-space:nowrap}
+  #selbar{position:fixed;left:0;right:0;bottom:0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:rgba(20,14,28,.97);border-top:1px solid var(--line);display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center}
+  #selbar span{font-weight:700;margin-right:6px}
+  #viewer{position:fixed;inset:0;background:rgba(0,0,0,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:12px;z-index:10}
+  #viewer img{max-width:100%;max-height:calc(100vh - 140px);border-radius:8px}
+  #viewer .row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  #printArea{display:none}
+  [hidden]{display:none!important}
+  @page{margin:.5in}
+  @media print{
+    body{background:#fff}
+    body>*:not(#printArea){display:none!important}
+    #printArea{display:block}
+    #printArea img{display:block;margin:0 auto;max-width:100%;max-height:9.8in;break-after:page;page-break-after:always}
+    #printArea img:last-child{break-after:auto;page-break-after:auto}
+  }
+</style>
+</head>
+<body>
+<main>
+  <a href="/">← Photo booth</a>
+  <h1>Tyler &amp; Julie — Photo Archive</h1>
+  <div class="muted" id="sub">Sign in to see every photo guests send.</div>
+
+  <form id="login">
+    <label>Email<input id="email" type="email" autocomplete="username" required></label>
+    <label>Password<input id="password" type="password" autocomplete="current-password" required></label>
+    <button class="primary">Sign in</button>
+  </form>
+
+  <div id="status" role="status" aria-live="polite"></div>
+
+  <section id="collection" hidden>
+    <div class="toolbar">
+      <button id="selectAll">Select all</button>
+      <button id="favOnly">♥ Favorites only</button>
+      <span class="grow"></span>
+      <button id="refresh">Refresh</button>
+      <a href="/" style="padding:9px 6px">Test the booth</a>
+      <button id="logout">Sign out</button>
+    </div>
+    <div id="grid"></div>
+    <div style="text-align:center;margin-top:20px"><button id="more" hidden>Load more</button></div>
+  </section>
+</main>
+
+<div id="selbar" hidden>
+  <span id="selCount">0 selected</span>
+  <button class="primary" id="bulkDownload">Download</button>
+  <button id="bulkPrint">Print</button>
+  <button class="danger" id="bulkDelete">Delete</button>
+  <button id="clearSel">Clear</button>
+</div>
+
+<div id="viewer" hidden>
+  <img id="viewImg" alt="">
+  <div class="muted" id="viewMeta"></div>
+  <div class="row">
+    <button class="primary" id="vDownload">Download</button>
+    <button id="vPrint">Print</button>
+    <button class="danger" id="vDelete">Delete</button>
+    <button id="vClose">Close</button>
+  </div>
+</div>
+
+<div id="printArea"></div>
+
 <script>
-let config,token=sessionStorage.getItem('archive_token'),photos=[],hidden=false,offset=0;const $=id=>document.getElementById(id),status=t=>$('status').textContent=t;
-async function request(path,options={}){const r=await fetch(path,{...options,headers:{'Content-Type':'application/json',Authorization:'Bearer '+token,...options.headers}});const b=await r.json();if(!r.ok){if(r.status===401)logout();throw new Error(b.error||'Request failed. Please try again.')}return b;}
-function logout(){token=null;sessionStorage.removeItem('archive_token');photos=[];$('photos').replaceChildren();$('login').hidden=false;$('collection').hidden=true;}
-async function load(append=false){try{status('Opening your memories…');const result=await request('/api/archive?offset='+(append?offset:0));photos=append?photos.concat(result.photos):result.photos;offset=photos.length;$('more').hidden=result.photos.length<50;$('login').hidden=true;$('collection').hidden=false;render();status(photos.length+' photos loaded.');}catch(e){status(e.message);}}
-function render(){$('photos').replaceChildren();for(const p of photos.filter(p=>hidden||!p.hidden)){const card=document.createElement('article'),img=document.createElement('img'),title=document.createElement('h2'),copy=document.createElement('p'),link=document.createElement('a');img.src=p.url;img.alt='Keepsake from '+p.guest_name;img.loading='lazy';title.textContent=p.guest_name;copy.textContent=[p.other_names,p.caption,p.note,new Date(p.created_at).toLocaleString()].filter(Boolean).join('\n');link.href=p.url;link.textContent='Download photograph';link.addEventListener('click',async e=>{e.preventDefault();try{const r=await fetch(p.url);if(!r.ok)throw Error();const u=URL.createObjectURL(await r.blob()),a=document.createElement('a');a.href=u;a.download='found-photo-'+p.id+'.jpg';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}catch{status('Download failed. Refresh the archive and retry.')}});card.append(img,title,copy,link);for(const field of ['favorite','hidden']){const b=document.createElement('button');b.textContent=field==='favorite'?(p.favorite?'♥ Favorited':'♡ Favorite'):(p.hidden?'Restore':'Hide');b.onclick=async()=>{b.disabled=true;try{await request('/api/archive',{method:'PATCH',body:JSON.stringify({id:p.id,field,value:!p[field]})});p[field]=!p[field];render()}catch(e){status(e.message);b.disabled=false}};card.append(b)}$('photos').append(card)}}
-$('login').onsubmit=async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;try{config ||= await fetch('/api/config').then(r=>r.json());const r=await fetch(config.url+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:config.key,'Content-Type':'application/json'},body:JSON.stringify({email:$('email').value.trim(),password:$('password').value})});const auth=await r.json();if(!r.ok)throw Error('Sign-in failed. Check your email and password.');token=auth.access_token;sessionStorage.setItem('archive_token',token);$('password').value='';await load()}catch(e){status(e.message)}finally{b.disabled=false}};
-$('logout').onclick=()=>{logout();status('Signed out on this tab.');};$('refresh').onclick=()=>load();$('more').onclick=()=>load(true);$('showHidden').onclick=()=>{hidden=!hidden;$('showHidden').textContent=hidden?'Hide hidden photos':'Show hidden photos';render()};if(token)load();
-</script></html>
+let config, token = null, photos = [], offset = 0, favOnly = false, viewing = null;
+const selected = new Set();
+const $ = id => document.getElementById(id);
+const status = t => $('status').textContent = t;
+try { token = sessionStorage.getItem('archive_token'); } catch {}
+
+async function request(path, options = {}) {
+  const r = await fetch(path, { ...options, headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token, ...options.headers } });
+  const b = await r.json().catch(() => ({}));
+  if (!r.ok) { if (r.status === 401) logout(); throw new Error(b.error || 'Request failed. Please try again.'); }
+  return b;
+}
+function logout() {
+  token = null; try { sessionStorage.removeItem('archive_token'); } catch {}
+  photos = []; selected.clear(); $('grid').replaceChildren();
+  $('login').hidden = false; $('collection').hidden = true; $('selbar').hidden = true; $('sub').textContent = 'Sign in to see every photo guests send.';
+}
+async function load(append = false) {
+  try {
+    status('Loading photos…');
+    const result = await request('/api/archive?offset=' + (append ? offset : 0));
+    photos = append ? photos.concat(result.photos) : result.photos;
+    offset = photos.length;
+    if (!append) selected.clear();
+    $('more').hidden = result.photos.length < 50;
+    $('login').hidden = true; $('collection').hidden = false;
+    render(); status('');
+  } catch (e) { status(e.message); }
+}
+
+const fmt = d => new Date(d).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+const fileName = p => `${(p.guest_name || 'guest').replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase()}-${new Date(p.created_at).toISOString().slice(0, 16).replace(/[:T]/g, '-')}-${p.id.slice(0, 4)}.jpg`;
+
+function render() {
+  const list = photos.filter(p => !favOnly || p.favorite);
+  $('sub').textContent = `${photos.length} photo${photos.length === 1 ? '' : 's'}${$('more').hidden ? '' : '+'} from your guests`;
+  $('grid').replaceChildren(...list.map(card));
+  if (!list.length) $('grid').innerHTML = `<p class="muted" style="grid-column:1/-1">${favOnly ? 'No favorites yet.' : 'No photos yet. Open the booth and take one to test it.'}</p>`;
+  updateSelbar();
+}
+
+function card(p) {
+  const el = document.createElement('div'); el.className = 'card' + (selected.has(p.id) ? ' sel' : '');
+  el.innerHTML = `<img loading="lazy" alt=""><button class="check" aria-label="Select">${selected.has(p.id) ? '✓' : ''}</button><button class="fav" aria-label="Favorite">${p.favorite ? '❤️' : '🤍'}</button><div class="meta"><b></b><small>${fmt(p.created_at)}</small></div><div class="actions"><button data-a="dl" title="Download" aria-label="Download">⬇ Save</button><button data-a="pr" title="Print" aria-label="Print">🖨</button><button class="danger" data-a="del" title="Delete" aria-label="Delete">🗑</button></div>`;
+  el.querySelector('img').src = p.url; el.querySelector('b').textContent = p.guest_name || 'Guest';
+  el.querySelector('img').onclick = () => openViewer(p);
+  el.querySelector('.check').onclick = () => { selected.has(p.id) ? selected.delete(p.id) : selected.add(p.id); render(); };
+  el.querySelector('.fav').onclick = async e => {
+    const b = e.currentTarget; b.disabled = true;
+    try { await request('/api/archive', { method: 'PATCH', body: JSON.stringify({ id: p.id, field: 'favorite', value: !p.favorite }) }); p.favorite = !p.favorite; render(); }
+    catch (err) { status(err.message); b.disabled = false; }
+  };
+  el.querySelector('[data-a=dl]').onclick = () => download([p]);
+  el.querySelector('[data-a=pr]').onclick = () => printPhotos([p]);
+  armDelete(el.querySelector('[data-a=del]'), () => remove([p.id]), '🗑', 'Sure?');
+  return el;
+}
+
+function updateSelbar() {
+  const n = selected.size; $('selbar').hidden = n === 0; $('selCount').textContent = `${n} selected`;
+  $('bulkDelete').textContent = 'Delete'; $('bulkDelete').classList.remove('armed');
+  const visible = photos.filter(p => !favOnly || p.favorite);
+  $('selectAll').textContent = visible.length && visible.every(p => selected.has(p.id)) ? 'Unselect all' : 'Select all';
+}
+
+// two-tap delete (no pop-up dialogs)
+function armDelete(btn, action, label, confirmLabel) {
+  let t;
+  btn.onclick = async () => {
+    if (!btn.classList.contains('armed')) { btn.classList.add('armed'); btn.textContent = confirmLabel; clearTimeout(t); t = setTimeout(() => { btn.classList.remove('armed'); btn.textContent = label; }, 3000); return; }
+    clearTimeout(t); btn.disabled = true; btn.textContent = 'Deleting…';
+    await action(); btn.disabled = false; btn.classList.remove('armed'); btn.textContent = label;
+  };
+}
+
+async function remove(ids) {
+  try {
+    const r = await request('/api/archive', { method: 'DELETE', body: JSON.stringify({ ids }) });
+    const gone = new Set(r.deleted || ids);
+    photos = photos.filter(p => !gone.has(p.id)); gone.forEach(id => selected.delete(id)); offset = photos.length;
+    if (viewing && gone.has(viewing.id)) closeViewer();
+    render(); status(`Deleted ${gone.size} photo${gone.size === 1 ? '' : 's'}.`);
+  } catch (e) { status(e.message); }
+}
+
+async function fetchBlob(p) { const r = await fetch(p.url); if (!r.ok) throw new Error('Photo link expired — tap Refresh and try again.'); return r.blob(); }
+function save(blob, name) { const u = URL.createObjectURL(blob), a = document.createElement('a'); a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 5000); }
+
+async function download(list) {
+  try {
+    if (list.length === 1) { status('Downloading…'); save(await fetchBlob(list[0]), fileName(list[0])); status(''); return; }
+    if (!window.JSZip) throw new Error('Zip tool did not load — refresh the page.');
+    const zip = new JSZip(); let i = 0;
+    for (const p of list) { status(`Preparing ${++i} of ${list.length}…`); zip.file(fileName(p), await fetchBlob(p)); }
+    status('Zipping…');
+    save(await zip.generateAsync({ type: 'blob' }), `tyler-julie-photos-${list.length}.zip`); status(`Downloaded ${list.length} photos.`);
+  } catch (e) { status(e.message); }
+}
+
+function printPhotos(list) {
+  const area = $('printArea'); area.replaceChildren();
+  const imgs = list.map(p => { const i = new Image(); i.src = p.url; area.append(i); return i; });
+  status('Preparing to print…');
+  Promise.all(imgs.map(i => i.complete ? null : new Promise(r => { i.onload = i.onerror = r; }))).then(() => { status(''); window.print(); });
+}
+
+function openViewer(p) {
+  viewing = p; $('viewImg').src = p.url; $('viewMeta').textContent = `${p.guest_name || 'Guest'} · ${fmt(p.created_at)}`; $('viewer').hidden = false;
+  $('vDelete').textContent = 'Delete'; $('vDelete').classList.remove('armed');
+}
+function closeViewer() { viewing = null; $('viewer').hidden = true; }
+$('vClose').onclick = closeViewer;
+$('viewer').onclick = e => { if (e.target.id === 'viewer') closeViewer(); };
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeViewer(); });
+$('vDownload').onclick = () => viewing && download([viewing]);
+$('vPrint').onclick = () => viewing && printPhotos([viewing]);
+armDelete($('vDelete'), () => viewing && remove([viewing.id]), 'Delete', 'Tap again to delete');
+
+const selectedList = () => photos.filter(p => selected.has(p.id));
+$('bulkDownload').onclick = () => download(selectedList());
+$('bulkPrint').onclick = () => printPhotos(selectedList());
+{ let t; $('bulkDelete').onclick = async () => {
+  const b = $('bulkDelete');
+  if (!b.classList.contains('armed')) { b.classList.add('armed'); b.textContent = `Tap again to delete ${selected.size}`; clearTimeout(t); t = setTimeout(updateSelbar, 3000); return; }
+  clearTimeout(t); b.disabled = true; b.textContent = 'Deleting…'; await remove([...selected]); b.disabled = false; updateSelbar();
+}; }
+$('clearSel').onclick = () => { selected.clear(); render(); };
+$('selectAll').onclick = () => {
+  const visible = photos.filter(p => !favOnly || p.favorite);
+  if (visible.every(p => selected.has(p.id))) visible.forEach(p => selected.delete(p.id)); else visible.forEach(p => selected.add(p.id));
+  render();
+};
+$('favOnly').onclick = () => { favOnly = !favOnly; $('favOnly').classList.toggle('on', favOnly); render(); };
+$('refresh').onclick = () => load();
+$('more').onclick = () => load(true);
+$('logout').onclick = () => { logout(); status('Signed out.'); };
+
+$('login').onsubmit = async e => {
+  e.preventDefault(); const b = e.submitter; b.disabled = true;
+  try {
+    config ||= await fetch('/api/config').then(r => r.json());
+    const r = await fetch(config.url + '/auth/v1/token?grant_type=password', { method: 'POST', headers: { apikey: config.key, 'Content-Type': 'application/json' }, body: JSON.stringify({ email: $('email').value.trim(), password: $('password').value }) });
+    const auth = await r.json();
+    if (!r.ok) throw Error('Sign-in failed. Check your email and password.');
+    token = auth.access_token; try { sessionStorage.setItem('archive_token', token); } catch {}
+    $('password').value = ''; await load();
+  } catch (err) { status(err.message); } finally { b.disabled = false; }
+};
+if (token) load();
+</script>
+</body>
+</html>

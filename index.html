@@ -147,12 +147,12 @@
   fetch('/api/config').then(r => r.json()).then(c => {
     config = c;
     const now = Date.now();
-    canSave = !!c.configured && ((now >= c.start && now < c.end) || !!authToken());
+    canSave = !!c.configured && (now < c.end || !!authToken());
     if (c.start) {
       const d = new Date(c.start).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
       $('dateLine').innerHTML = 'Till death do us part<br>' + d;
     }
-    if (!canSave) $('modeNote').textContent = 'Practice mode — photos start sending to Tyler & Julie on the wedding day. You can still take and download photos.';
+    if (!canSave) $('modeNote').textContent = 'The photo booth is closed, but you can still take and download photos.';
   }).catch(() => {});
 
   // ---------- helpers ----------

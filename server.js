@@ -29,10 +29,10 @@ module.exports=async function(req,res) {
  const send=(s,b)=>res.status(s).json(b);
  const path=req.url.split('?')[0];const token=(req.headers.authorization||'').replace(/^Bearer /,'');
  try {
- if(path==='/api/config'&&req.method==='GET')return send(200,{url:URL,key:PUBLIC,configured:!!SECRET,open:Date.now()>=START&&Date.now()<END,start:START,end:END});
+ if(path==='/api/config'&&req.method==='GET')return send(200,{url:URL,key:PUBLIC,configured:!!SECRET,open:Date.now()<END,start:START,end:END});
  if(!SECRET)return send(503,{error:'Photo storage is not connected yet. Please download your keepsake.'});
  if(path==='/api/upload'&&req.method==='POST') {
- if(!(Date.now()>=START&&Date.now()<END)&&!await owner(token))return send(403,{error:'Guest collection opens October 24 at 5 PM Eastern.'});
+ if(Date.now()>=END&&!await owner(token))return send(403,{error:'The photo booth has closed. Please download your photo.'});
  if(!String(req.headers['content-type']||'').startsWith('application/json'))return send(415,{error:'JSON required.'});
  let b=req.body;if(typeof b==='string')b=JSON.parse(b);
  let bytes;try{bytes=validate(b);}catch(e){return send(400,{error:e.message});}
@@ -49,6 +49,14 @@ module.exports=async function(req,res) {
  const offset=Math.max(0,Number(new global.URL(req.url,'https://local').searchParams.get('offset'))||0);
  const rows=await api(`/rest/v1/wedding_photos?select=*&order=created_at.desc&limit=50&offset=${offset}`,{},token);
  const photos=await Promise.all(rows.map(async p=>{const signed=await api(`/storage/v1/object/sign/${bucket}/${p.edited_photo_path||p.photo_path}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({expiresIn:3600})},token);return {...p,url:URL+'/storage/v1'+signed.signedURL};}));return send(200,{photos});
+ }
+ if(req.method==='DELETE') {
+ const b=typeof req.body==='string'?JSON.parse(req.body):req.body;const ids=Array.isArray(b?.ids)?b.ids:[];
+ if(!ids.length||ids.length>200||!ids.every(id=>uuid.test(id)))return send(400,{error:'Invalid delete request.'});
+ const rows=await api(`/rest/v1/wedding_photos?id=in.(${ids.join(',')})`,{method:'DELETE',headers:{Prefer:'return=representation'}});
+ const paths=[...new Set((rows||[]).flatMap(r=>[r.photo_path,r.edited_photo_path]).filter(Boolean))];
+ if(paths.length)await api(`/storage/v1/object/${bucket}`,{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({prefixes:paths})}).catch(()=>{});
+ return send(200,{deleted:(rows||[]).map(r=>r.id)});
  }
  if(req.method==='PATCH') {const b=typeof req.body==='string'?JSON.parse(req.body):req.body;if(!uuid.test(b?.id||'')||!['favorite','hidden'].includes(b.field)||typeof b.value!=='boolean')return send(400,{error:'Invalid update.'});await api(`/rest/v1/wedding_photos?id=eq.${b.id}`,{method:'PATCH',headers:{'Content-Type':'application/json',Prefer:'return=representation'},body:JSON.stringify({[b.field]:b.value})},token);return send(200,{saved:true});}
  }
