@@ -1,631 +1,447 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#171512" />
-<title>Found Photographs — Tyler & Julie</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0d0a12">
+<title>Tyler & Julie — Photo Booth</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Creepster&family=Great+Vibes&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#171312;
-    --paper:#f2eadf;
-    --paper-2:#ded0bf;
-    --card:#f8f1e7;
-    --muted:#766b62;
-    --line:rgba(28,17,18,.20);
-    --red:#7f1d2d;
-    --blood:#5f101c;
-    --plum:#2f1b2b;
-    --night:#0d0b0d;
-    --gold:#a77a3c;
-    --shadow:0 24px 70px rgba(18,15,11,.18);
-    --radius:28px;
+    --bg:#0d0a12; --ink:#f5ead7; --muted:#a99fb3; --orange:#ff8a3d; --purple:#6b3fa0; --line:rgba(255,255,255,.14);
   }
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{
-    margin:0;
-    color:var(--ink);
-    background:
-      radial-gradient(circle at 50% -10%, rgba(127,29,45,.30), transparent 34%),
-      radial-gradient(circle at 10% 30%, rgba(72,43,68,.22), transparent 28%),
-      radial-gradient(circle at 90% 24%, rgba(95,16,28,.16), transparent 28%),
-      repeating-linear-gradient(90deg, rgba(255,255,255,.012) 0 1px, transparent 1px 5px),
-      var(--night);
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-    min-height:100vh;
-    position:relative;
-  }
-  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(ellipse at center,transparent 35%,rgba(0,0,0,.58) 100%)}
-  body::after{content:"☾     ✦     ♡     ✧     ☾";position:fixed;left:0;right:0;bottom:10px;text-align:center;letter-spacing:2.4em;color:rgba(255,245,235,.10);font-family:Georgia,serif;font-size:18px;pointer-events:none;z-index:-1}
-  button,input,textarea{font:inherit}
-  button{cursor:pointer}
-  .shell{max-width:1220px;margin:0 auto;padding:20px clamp(14px,3vw,34px) 64px}
-  .ticker{
-    overflow:hidden;border:1px solid rgba(255,255,255,.12);border-left:0;border-right:0;
-    margin:0 calc(-1 * clamp(14px,3vw,34px));
-    background:rgba(14,10,13,.72);backdrop-filter: blur(12px);color:#f4e9df;
-  }
-  .ticker-track{display:flex;gap:48px;white-space:nowrap;padding:10px 0;animation:ticker 28s linear infinite;font-size:12px;letter-spacing:.18em}
-  @keyframes ticker{to{transform:translateX(-50%)}}
-  .hero{display:grid;grid-template-columns:1.12fr .88fr;gap:28px;align-items:end;padding:54px 0 34px}
-  .eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#c8b8ad;margin-bottom:18px}
-  h1{font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:clamp(54px,8vw,112px);line-height:.86;letter-spacing:-.055em;margin:0;max-width:850px;color:#f4eadf;text-shadow:0 12px 60px rgba(95,16,28,.35)}
-  .hero-copy{font-family:Georgia,"Times New Roman",serif;font-size:clamp(18px,2.2vw,28px);line-height:1.3;margin:18px 0 0;max-width:650px;color:#d8c9be}
-  .event-card{background:linear-gradient(145deg,rgba(248,241,231,.96),rgba(230,216,203,.93));border:1px solid rgba(255,255,255,.15);border-radius:24px;padding:22px;box-shadow:0 25px 90px rgba(0,0,0,.48);transform:rotate(1.1deg);position:relative;overflow:hidden}.event-card::after{content:'☾';position:absolute;right:16px;top:8px;font-family:Georgia,serif;font-size:82px;color:rgba(95,16,28,.08);transform:rotate(12deg)}
-  .event-card strong{font-family:Georgia,"Times New Roman",serif;font-size:28px;font-weight:500;display:block;margin-top:8px}
-  .countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:20px}
-  .countdown div{border-top:1px solid var(--line);padding-top:10px;text-align:center}
-  .countdown b{display:block;font-family:Georgia,"Times New Roman",serif;font-size:28px;font-weight:500}
-  .countdown span{font-size:9px;letter-spacing:.16em;color:var(--muted)}
-  .booth{display:grid;grid-template-columns:minmax(0,1.03fr) minmax(340px,.97fr);gap:24px;align-items:start}
-  .panel{background:linear-gradient(180deg,rgba(248,241,231,.97),rgba(236,224,211,.95));border:1px solid rgba(255,255,255,.10);border-radius:var(--radius);box-shadow:0 30px 100px rgba(0,0,0,.48);overflow:hidden;position:relative}.panel::before{content:'✦';position:absolute;right:18px;top:12px;color:rgba(95,16,28,.12);font-size:28px;font-family:Georgia,serif;pointer-events:none}
-  .preview-panel{position:sticky;top:16px}
-  .panel-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.08);background:linear-gradient(90deg,#171114,#2a151e);color:#f4eadf}
-  .panel-head .label{font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:#d8c7bb}
-  .rec{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.14em}
-  .dot{width:9px;height:9px;border-radius:50%;background:var(--red);box-shadow:0 0 0 5px rgba(164,42,42,.09);animation:pulse 1.4s ease-in-out infinite}
-  @keyframes pulse{50%{opacity:.35}}
-  .stage{padding:16px;background:radial-gradient(circle at 50% 10%,#332028,#140f12 62%,#090809)}
-  .canvas-wrap{position:relative;aspect-ratio:4/5;max-height:74vh;margin:auto;background:#eee;overflow:hidden;border-radius:18px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
-  canvas{display:block;width:100%;height:100%;object-fit:contain;background:#e9e3d8}
-  .empty-state{position:absolute;inset:0;display:grid;place-items:center;padding:38px;text-align:center;color:#463e36;background:linear-gradient(145deg,#f7f0e7,#ded2c2)}
-  .empty-state.hidden{display:none}
-  .empty-mark{font-family:Georgia,"Times New Roman",serif;font-size:62px;line-height:1;margin-bottom:18px}
-  .empty-title{font-family:Georgia,"Times New Roman",serif;font-size:28px;margin-bottom:8px}
-  .empty-state p{max-width:360px;margin:0 auto;color:#6d6258;line-height:1.45;font-size:13px}
-  .preview-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 16px 16px;background:linear-gradient(90deg,#140f12,#25151c)}
-  .controls{padding:8px 18px 22px}
-  .section{padding:18px 2px;border-bottom:1px solid var(--line)}
-  .section:last-child{border-bottom:0}
-  .step{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}
-  .step-num{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;flex:0 0 auto;font-size:11px}
-  .step h3{font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:22px;margin:2px 0 2px}
-  .step p{margin:0;color:var(--muted);font-size:11px;line-height:1.4}
-  .source-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .btn,.file-label{
-    min-height:48px;border-radius:999px;border:1px solid var(--ink);background:transparent;color:var(--ink);
-    display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:0 18px;font-size:12px;letter-spacing:.06em;transition:.2s ease;text-decoration:none;
-  }
-  .btn:hover,.file-label:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(0,0,0,.08)}
-  .btn.primary{background:linear-gradient(135deg,#4f101d,#7f1d2d);color:#fff7ef;border-color:#6d1725;box-shadow:0 12px 30px rgba(95,16,28,.18)}
-  .btn.light{background:var(--paper);border-color:var(--paper);color:var(--ink)}
-  .btn.ghost{border-color:rgba(255,255,255,.35);color:#fff}
-  .btn.danger{border-color:#7f2020;color:#7f2020}
-  .btn:disabled{opacity:.42;cursor:not-allowed;transform:none;box-shadow:none}
-  input[type=file]{display:none}
-  .chips{display:flex;gap:8px;overflow:auto;padding:2px 2px 6px;scrollbar-width:thin}
-  .chip{white-space:nowrap;border:1px solid var(--line);background:#fffaf3;border-radius:999px;padding:10px 13px;font-size:11px;color:#4e473f;transition:.15s}
-  .chip.active{background:linear-gradient(135deg,#2a151e,#6d1725);border-color:#6d1725;color:#fff6ec}
-  .chip:hover{border-color:rgba(23,21,18,.45)}
-  .fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .field{display:flex;flex-direction:column;gap:7px}
-  .field.full{grid-column:1/-1}
-  label.meta{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-  input[type=text],textarea{
-    width:100%;border:1px solid var(--line);background:rgba(255,255,255,.64);border-radius:14px;padding:13px 14px;outline:none;color:var(--ink);font-size:13px;
-  }
-  textarea{min-height:84px;resize:vertical;line-height:1.45}
-  input:focus,textarea:focus{border-color:rgba(23,21,18,.55);box-shadow:0 0 0 4px rgba(23,21,18,.05)}
-  .char{font-size:10px;color:var(--muted);text-align:right;margin-top:4px}
-  .status-bar{display:flex;gap:10px;align-items:flex-start;padding:14px;border:1px dashed var(--line);border-radius:16px;background:rgba(255,255,255,.35);font-size:11px;line-height:1.45;color:var(--muted)}
-  .status-bar strong{color:var(--ink);display:block;margin-bottom:2px}
-  .submit-row{display:grid;grid-template-columns:1fr;gap:10px;margin-top:14px}
-  .camera-modal{position:fixed;inset:0;background:rgba(14,12,10,.94);z-index:50;display:none;align-items:center;justify-content:center;padding:18px}
-  .camera-modal.open{display:flex}
-  .camera-card{width:min(860px,100%);height:min(780px,92vh);display:grid;grid-template-rows:auto 1fr auto;background:#090709;border:1px solid rgba(255,255,255,.13);border-radius:28px;overflow:hidden;box-shadow:0 0 0 1px rgba(127,29,45,.2),0 40px 120px rgba(0,0,0,.65)}
-  .camera-top{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;color:#fff;border-bottom:1px solid rgba(255,255,255,.12)}
-  .camera-top span{font-size:11px;letter-spacing:.15em}
-  .camera-top button{background:none;color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:9px 13px}
-  .video-wrap{position:relative;overflow:hidden;background:#000;display:grid;place-items:center}
-  video{width:100%;height:100%;object-fit:cover}
-  .countdown-overlay{position:absolute;inset:0;display:none;place-items:center;background:rgba(0,0,0,.18);color:#fff;font-family:Georgia,"Times New Roman",serif;font-size:min(28vw,180px);text-shadow:0 6px 24px rgba(0,0,0,.4)}
-  .countdown-overlay.show{display:grid}
-  .camera-bottom{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:18px;background:#080808}
-  .camera-bottom .left{justify-self:start}.camera-bottom .right{justify-self:end}
-  .capture{width:78px;height:78px;border-radius:50%;border:7px solid #fff;background:#fff;box-shadow:inset 0 0 0 4px #111}
-  .camera-bottom button:not(.capture){border:1px solid rgba(255,255,255,.3);background:none;color:#fff;border-radius:999px;padding:10px 14px}
-  .flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:80}
-  .flash.go{animation:flash .42s ease}
-  @keyframes flash{0%{opacity:0}30%{opacity:1}100%{opacity:0}}
-  .toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);background:var(--ink);color:var(--paper);padding:12px 16px;border-radius:999px;font-size:11px;opacity:0;pointer-events:none;transition:.25s;z-index:100;box-shadow:0 16px 50px rgba(0,0,0,.22)}
-  .toast.show{opacity:1;transform:translate(-50%,0)}
-  .footer{padding:70px 0 14px;text-align:center;color:#f1e5da}
-  .footer .big{font-family:Georgia,"Times New Roman",serif;font-size:clamp(38px,6vw,76px);line-height:.95;letter-spacing:-.04em}
-  .footer p{color:#bca99d;max-width:620px;margin:16px auto 0;line-height:1.6;font-size:12px}
-  .footer .sig{margin-top:28px;letter-spacing:.18em;font-size:10px}
-  .tiny{font-size:10px;color:var(--muted);line-height:1.45}
-  .kbd{display:inline-block;padding:2px 6px;border:1px solid var(--line);border-radius:5px;background:#fff;font-size:9px}
-  @media(max-width:920px){
-    .hero{grid-template-columns:1fr}.event-card{transform:none;max-width:560px}.booth{grid-template-columns:1fr}.preview-panel{position:relative;top:auto}.canvas-wrap{max-height:none}.preview-panel{order:1}.controls-panel{order:2}
-  }
-  @media(max-width:620px){
-    .shell{padding-left:10px;padding-right:10px}.hero{padding-top:38px}.panel{border-radius:22px}.fields,.source-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.preview-actions{grid-template-columns:1fr}.countdown b{font-size:21px}.camera-card{height:100%;border-radius:18px}.camera-modal{padding:8px}.capture{width:68px;height:68px}
-  }
-  @media(prefers-reduced-motion:reduce){.ticker-track,.dot{animation:none}*{scroll-behavior:auto!important}}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;overflow:hidden}
+  button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+  .screen{position:fixed;inset:0;display:none}
+  .screen.on{display:block}
+
+  /* ---------- Welcome ---------- */
+  #welcome{display:none;background:radial-gradient(120% 70% at 50% 0%,#2a1640 0%,var(--bg) 60%);overflow-y:auto}
+  #welcome.on{display:flex;align-items:center;justify-content:center}
+  .welcome-inner{width:100%;max-width:400px;padding:32px 20px calc(32px + env(safe-area-inset-bottom));text-align:center}
+  .bats{font-size:26px;letter-spacing:14px;opacity:.85;animation:float 4s ease-in-out infinite}
+  @keyframes float{50%{transform:translateY(-6px)}}
+  h1{font-family:"Great Vibes",cursive;font-weight:400;font-size:64px;line-height:1.1;margin:10px 0 6px}
+  .sub{color:var(--orange);font-size:13px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;line-height:1.7}
+  .card{margin-top:34px;text-align:left}
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:8px;font-weight:600}
+  input[type=text]{width:100%;font-size:18px;padding:15px 16px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--ink);outline:none}
+  input[type=text]:focus{border-color:var(--orange)}
+  .primary{display:block;width:100%;margin-top:14px;padding:16px;border-radius:14px;background:var(--orange);color:#1a0f05;font-weight:700;font-size:18px}
+  .primary:disabled{opacity:.45}
+  .fine{margin-top:16px;font-size:13px;color:var(--muted);text-align:center;line-height:1.5}
+
+  /* ---------- Camera / Review ---------- */
+  #camera,#review{background:#000}
+  .stage{position:absolute;left:50%;top:env(safe-area-inset-top);transform:translateX(-50%);
+    width:min(100vw, calc((100vh - env(safe-area-inset-top)) * 9 / 16));
+    width:min(100vw, calc((100dvh - env(safe-area-inset-top)) * 9 / 16));
+    aspect-ratio:9/16;overflow:hidden;background:#111;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+  @media (min-aspect-ratio: 10/16){.stage{border-radius:18px}}
+  .stage video,.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .stage video{object-fit:cover}
+  .stage video.mirror{transform:scaleX(-1)}
+  .pill{position:absolute;top:16px;left:50%;transform:translateX(-50%);padding:7px 14px;border-radius:99px;background:rgba(0,0,0,.55);font-size:14px;font-weight:600;white-space:nowrap;transition:opacity .3s;pointer-events:none}
+  .pill.hide{opacity:0}
+  .arrow{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:56px;font-size:30px;line-height:56px;text-align:center;color:rgba(255,255,255,.75);text-shadow:0 1px 4px #000}
+  .arrow.l{left:2px}.arrow.r{right:2px}
+  .topbtn{position:absolute;top:12px;width:42px;height:42px;border-radius:50%;background:rgba(0,0,0,.45);font-size:20px;display:grid;place-items:center}
+  .topbtn.l{left:12px}.topbtn.r{right:12px}
+  .dots{position:absolute;left:0;right:0;display:flex;justify-content:center;gap:6px;pointer-events:none}
+  .dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.4)}
+  .dots i.on{background:#fff;width:18px;border-radius:4px}
+  .bar{position:absolute;left:0;right:0;bottom:0;padding:0 24px calc(22px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;max-width:480px;margin:0 auto}
+  .shutter{width:78px;height:78px;border-radius:50%;border:5px solid #fff;background:rgba(255,255,255,.25);transition:transform .1s}
+  .shutter:active{transform:scale(.9)}
+  .round{width:52px;height:52px;border-radius:50%;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);display:grid;place-items:center;font-size:22px}
+  .round small{display:block;font-size:10px;margin-top:2px}
+  .spacer{width:52px}
+  .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .35s}
+  .flash.go{opacity:1;transition:none}
+  .hint{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);padding:10px 16px;border-radius:12px;background:rgba(0,0,0,.6);font-size:15px;font-weight:600;transition:opacity .5s;pointer-events:none;white-space:nowrap}
+  .hint.hide{opacity:0}
+
+  .review-bar{gap:12px}
+  .send{flex:1;height:56px;border-radius:28px;background:var(--orange);color:#1a0f05;font-weight:700;font-size:17px}
+  .send.done{background:#3ecf8e}
+  .send:disabled{opacity:.6}
+  .iconbtn{width:56px;height:56px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.25);display:grid;place-items:center}
+  .iconbtn svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+  .toast{position:fixed;left:50%;top:calc(70px + env(safe-area-inset-top));transform:translateX(-50%);max-width:90vw;padding:11px 16px;border-radius:12px;background:rgba(20,14,28,.95);border:1px solid var(--line);font-size:14px;text-align:center;opacity:0;transition:opacity .3s;pointer-events:none;z-index:50}
+  .toast.show{opacity:1}
 </style>
 </head>
 <body>
-<div class="flash" id="flash"></div>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-<div class="shell">
-  <div class="ticker" aria-hidden="true"><div class="ticker-track">
-    <span>● THE WEDDING ARCHIVE · 10.24.26</span><span>FOUND PHOTOGRAPHS · TYLER & JULIE</span><span>LOVE · LAUGHTER · LITTLE FRIGHTS</span><span>● THE WEDDING ARCHIVE · 10.24.26</span><span>FOUND PHOTOGRAPHS · TYLER & JULIE</span><span>LOVE · LAUGHTER · LITTLE FRIGHTS</span>
-  </div></div>
 
-  <header class="hero">
-    <div>
-      <div class="eyebrow">Guest Photo Booth · Tyler & Julie · October 24, 2026</div>
-      <h1>Found<br>Photographs.</h1>
-      <p class="hero-copy">Love. Laughter. Little frights. Leave behind a photograph worth haunting Tyler & Julie’s wedding archive forever.</p>
-    </div>
-    <aside class="event-card">
-      <span class="tiny">THE ARCHIVE OPENS</span>
-      <strong>October 24, 2026</strong>
-      <div class="countdown" id="countdown">
-        <div><b id="days">00</b><span>DAYS</span></div><div><b id="hours">00</b><span>HOURS</span></div><div><b id="minutes">00</b><span>MIN</span></div><div><b id="seconds">00</b><span>SEC</span></div>
-      </div>
-      <p class="tiny" id="archiveStatus" style="margin:16px 0 0">Preview mode is open now. Make and download a keepsake; collection stays closed until the wedding.</p>
-    </aside>
-  </header>
-
-  <main class="booth">
-    <section class="panel preview-panel">
-      <div class="panel-head"><span class="label">Photo 01 / Your Keepsake</span><span class="rec"><span class="dot"></span> LIVE PREVIEW</span></div>
-      <div class="stage">
-        <div class="canvas-wrap">
-          <canvas id="canvas" width="1600" height="2000" aria-label="Keepsake preview"></canvas>
-          <div class="empty-state" id="emptyState">
-            <div><div class="empty-mark">✧</div><div class="empty-title">You were here.<br>We want proof.</div><p>Choose a photo or open the camera. Your frame, filter, names and caption update here instantly.</p></div>
-          </div>
-        </div>
-      </div>
-      <div class="preview-actions">
-        <button class="btn light" id="downloadBtn" disabled>↓ Download keepsake</button>
-        <button class="btn ghost" id="resetBtn">↺ Start over</button>
-      </div>
-    </section>
-
-    <section class="panel controls-panel">
-      <div class="controls">
-        <div class="section">
-          <div class="step"><div class="step-num">01</div><div><h3>Add your photo</h3><p>Upload one, use your phone camera, or open the full photo booth camera.</p></div></div>
-          <div class="source-grid">
-            <label class="file-label" for="fileInput">↑ Choose photo</label>
-            <button class="btn primary" id="openCameraBtn">◉ Open camera</button>
-          </div>
-          <input id="fileInput" type="file" accept="image/*" />
-          <input id="quickCameraInput" type="file" accept="image/*" capture="user" />
-          <div style="margin-top:10px;display:flex;justify-content:center"><button class="btn" id="quickCameraBtn" style="min-height:38px">Use phone camera instead</button></div>
-        </div>
-
-        <div class="section">
-          <div class="step"><div class="step-num">02</div><div><h3>Pick your personality</h3><p>Cute, creepy, Halloween, or classic — every frame is baked into the final photo.</p></div></div>
-          <div class="chips" id="frameChips"></div>
-        </div>
-
-        <div class="section">
-          <div class="step"><div class="step-num">03</div><div><h3>Set the mood</h3><p>Go romantic, vintage, candlelit, haunted, blood-moon red, or midnight-dark. Change it anytime.</p></div></div>
-          <div class="chips" id="filterChips"></div>
-        </div>
-
-        <div class="section">
-          <div class="step"><div class="step-num">04</div><div><h3>Make it personal</h3><p>Your name is required only for collection. It can stay off the photo.</p></div></div>
-          <div class="fields">
-            <div class="field"><label class="meta" for="nameInput">Your name</label><input id="nameInput" type="text" maxlength="45" placeholder="Required on wedding day" /></div>
-            <div class="field"><label class="meta" for="peopleInput">Who else is in the photo?</label><input id="peopleInput" type="text" maxlength="70" placeholder="Optional" /></div>
-            <div class="field full"><label class="meta" for="captionInput">On-photo caption</label><input id="captionInput" type="text" maxlength="100" placeholder="A caption on the photo" /><div class="char"><span id="captionCount">0</span> / 100</div></div>
-            <div class="field full"><label class="meta" for="noteInput">A note for Tyler & Julie</label><textarea id="noteInput" maxlength="800" placeholder="A wish for you · A favorite memory · A little advice"></textarea><div class="char"><span id="noteCount">0</span> / 800</div></div>
-          </div>
-          <p class="tiny" style="margin:10px 0 0">Long notes get their own keepsake card so every word stays readable.</p>
-        </div>
-
-        <div class="section">
-          <div class="status-bar"><span>◌</span><div><strong id="modeTitle">Preview only</strong><span id="modeCopy">Your photo stays on this device and is not sent to the couple. Download anything you make.</span></div></div>
-          <div class="submit-row"><button class="btn primary" id="submitBtn" disabled>Wedding uploads not open yet</button></div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="big">The night ends.<br>The evidence remains.</div>
-    <p>All your favorite people. All their beautiful, ridiculous memories. Keep one for yourself; leave one in the archive when collection opens.</p>
-    <div class="sig">✧ TYLER & JULIE HAWTHORNE · FOUND PHOTOGRAPHS · FOREVER MEMORIES · 10.24.26</div>
-  <p><a href="/archive" style="color:#ead9cb">Tyler & Julie · Private archive</a></p></footer>
-</div>
-
-<div class="camera-modal" id="cameraModal" aria-hidden="true">
-  <div class="camera-card">
-    <div class="camera-top"><span>FOUND PHOTOGRAPHS · CAMERA</span><button id="closeCameraBtn">Close</button></div>
-    <div class="video-wrap"><video id="video" autoplay muted playsinline></video><div class="countdown-overlay" id="countdownOverlay">3</div></div>
-    <div class="camera-bottom"><div class="left"><button id="flipCameraBtn">↻ Flip</button></div><button class="capture" id="captureBtn" aria-label="Take photo"></button><div class="right"><button id="timerBtn">3s timer: On</button></div></div>
+<!-- 1. Name -->
+<section id="welcome" class="screen on">
+  <div class="welcome-inner">
+    <div class="bats">🦇 🕸️ 🦇</div>
+    <h1>Tyler &amp; Julie</h1>
+    <div class="sub" id="dateLine">Till death do us part</div>
+    <form class="card" id="nameForm" autocomplete="off">
+      <label for="nameInput">Your name</label>
+      <input id="nameInput" type="text" maxlength="60" placeholder="First &amp; last name" enterkeyhint="go" required>
+      <button class="primary" id="startBtn" type="submit">Open camera 📸</button>
+    </form>
+    <p class="fine" id="modeNote">Every photo you keep gets sent straight to Tyler &amp; Julie.</p>
   </div>
-</div>
+</section>
+
+<!-- 2. Camera -->
+<section id="camera" class="screen">
+  <div class="stage" id="camStage">
+    <video id="video" playsinline muted autoplay></video>
+    <canvas id="overlay" width="1080" height="1920"></canvas>
+    <div class="flash" id="flash"></div>
+    <button class="arrow l" data-dir="-1" aria-label="Previous frame">‹</button>
+    <button class="arrow r" data-dir="1" aria-label="Next frame">›</button>
+    <div class="pill" id="camPill"></div>
+    <div class="hint" id="hint">← Swipe for frames →</div>
+    <button class="topbtn l" id="backBtn" aria-label="Back">✕</button>
+  </div>
+  <div class="dots" id="camDots"></div>
+  <div class="bar">
+    <span class="spacer"></span>
+    <button class="shutter" id="shutter" aria-label="Take photo"></button>
+    <button class="round" id="flipBtn" aria-label="Flip camera">🔄</button>
+  </div>
+  <input type="file" id="fileInput" accept="image/*" capture="user" hidden>
+</section>
+
+<!-- 3. Review -->
+<section id="review" class="screen">
+  <div class="stage" id="revStage">
+    <canvas id="final" width="1080" height="1920"></canvas>
+    <button class="arrow l" data-dir="-1" aria-label="Previous frame">‹</button>
+    <button class="arrow r" data-dir="1" aria-label="Next frame">›</button>
+    <div class="pill hide" id="revPill"></div>
+  </div>
+  <div class="dots" id="revDots"></div>
+  <div class="bar review-bar">
+    <button class="iconbtn" id="retakeBtn" aria-label="Delete and retake">
+      <svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v6M14 11v6"/></svg>
+    </button>
+    <button class="send" id="sendBtn">Send to Tyler &amp; Julie ♥</button>
+    <button class="iconbtn" id="downloadBtn" aria-label="Download photo">
+      <svg viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+    </button>
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
 
 <script>
 (() => {
-  'use strict';
+  const W = 1080, H = 1920;
+  const UPLOAD_URL = '/api/upload';
+  const $ = id => document.getElementById(id);
+  const authToken = () => { try { return sessionStorage.getItem('archive_token') || ''; } catch { return ''; } };
 
-  // Production collection adapter. Leave blank for preview-only mode.
-  // When ready, set this to a secure endpoint that accepts multipart FormData.
-  const SUBMISSION_ENDPOINT = '/api/upload';
-  let config = null, submitting = false, saved = false, uploadId = null, capturing = false, cameraGeneration = 0;
-  let resetTimer;
-  const authToken = () => sessionStorage.getItem('archive_token') || '';
-  fetch('/api/config').then(r=>r.json()).then(c=>{config=c;updateEventMode()}).catch(()=>showToast('Connection unavailable. You can still download a keepsake.'));
-  const EVENT_TIME = new Date('2026-10-24T17:00:00-04:00').getTime();
+  let config = null;
+  let canSave = false;
+  fetch('/api/config').then(r => r.json()).then(c => {
+    config = c;
+    const now = Date.now();
+    canSave = !!c.configured && ((now >= c.start && now < c.end) || !!authToken());
+    if (c.start) {
+      const d = new Date(c.start).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      $('dateLine').innerHTML = 'Till death do us part<br>' + d;
+    }
+    if (!canSave) $('modeNote').textContent = 'Practice mode — photos start sending to Tyler & Julie on the wedding day. You can still take and download photos.';
+  }).catch(() => {});
 
-  const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');
-  const emptyState = document.getElementById('emptyState');
-  const fileInput = document.getElementById('fileInput');
-  const quickCameraInput = document.getElementById('quickCameraInput');
-  const downloadBtn = document.getElementById('downloadBtn');
-  const resetBtn = document.getElementById('resetBtn');
-  const captionInput = document.getElementById('captionInput');
-  const noteInput = document.getElementById('noteInput');
-  const nameInput = document.getElementById('nameInput');
-  const peopleInput = document.getElementById('peopleInput');
-  const submitBtn = document.getElementById('submitBtn');
-  const toastEl = document.getElementById('toast');
+  // ---------- helpers ----------
+  const toastEl = $('toast'); let toastT;
+  function toast(msg, ms = 2600) { toastEl.textContent = msg; toastEl.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove('show'), ms); }
+  function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); }
+  const EMOJI = '"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
 
-  const cameraModal = document.getElementById('cameraModal');
-  const video = document.getElementById('video');
-  const countdownOverlay = document.getElementById('countdownOverlay');
-  const flash = document.getElementById('flash');
-  let stream = null;
-  let facingMode = 'user';
-  let timerOn = true;
+  function emoji(ctx, ch, x, y, size, rot = 0) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot * Math.PI / 180);
+    ctx.font = `${size}px ${EMOJI}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(ch, 0, 0); ctx.restore();
+  }
+  function text(ctx, str, y, { font, size, color = '#fff', shadow = true, maxW = 960 }) {
+    ctx.save(); let s = size;
+    ctx.font = `${s}px ${font}`;
+    while (ctx.measureText(str).width > maxW && s > 20) { s -= 4; ctx.font = `${s}px ${font}`; }
+    ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; ctx.fillStyle = color;
+    if (shadow) { ctx.shadowColor = 'rgba(0,0,0,.7)'; ctx.shadowBlur = 18; ctx.shadowOffsetY = 3; }
+    ctx.fillText(str, W / 2, y); ctx.restore();
+  }
+  function fadeBottom(ctx, h, a = .65) { const g = ctx.createLinearGradient(0, H - h, 0, H); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, `rgba(0,0,0,${a})`); ctx.fillStyle = g; ctx.fillRect(0, H - h, W, h); }
+  function fadeTop(ctx, h, color = '0,0,0', a = .55) { const g = ctx.createLinearGradient(0, 0, 0, h); g.addColorStop(0, `rgba(${color},${a})`); g.addColorStop(1, `rgba(${color},0)`); ctx.fillStyle = g; ctx.fillRect(0, 0, W, h); }
+  function stampText(t) {
+    const d = t.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const tm = t.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    return `${d}  •  ${tm}`;
+  }
+  function stamp(ctx, t, color = '#fff', y = H - 70, shadow = true) {
+    ctx.save(); ctx.font = `600 40px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif`;
+    ctx.textAlign = 'center'; ctx.fillStyle = color;
+    if ('letterSpacing' in ctx) ctx.letterSpacing = '3px';
+    if (shadow) { ctx.shadowColor = 'rgba(0,0,0,.8)'; ctx.shadowBlur = 10; ctx.shadowOffsetY = 2; }
+    ctx.fillText(stampText(t), W / 2, y); ctx.restore();
+  }
+  function web(ctx, cx, cy, r, a0, a1) {
+    ctx.save(); ctx.strokeStyle = 'rgba(255,255,255,.8)'; ctx.lineWidth = 3; ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 6;
+    const spokes = 7, rings = 6, angs = [];
+    for (let i = 0; i < spokes; i++) angs.push((a0 + (a1 - a0) * i / (spokes - 1)) * Math.PI / 180);
+    angs.forEach(a => { ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r); ctx.stroke(); });
+    for (let k = 1; k <= rings; k++) {
+      const rr = r * k / rings; ctx.beginPath();
+      for (let i = 0; i < spokes; i++) {
+        const x = cx + Math.cos(angs[i]) * rr, y = cy + Math.sin(angs[i]) * rr;
+        if (i === 0) ctx.moveTo(x, y);
+        else { const am = (angs[i] + angs[i - 1]) / 2, sag = rr * .86; ctx.quadraticCurveTo(cx + Math.cos(am) * sag, cy + Math.sin(am) * sag, x, y); }
+      }
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
 
-  const state = {
-    img: null,
-    imgDataUrl: '',
-    frame: 'classic',
-    filter: 'original',
-    objectUrl: null
-  };
-
-  const frames = [
-    ['classic','♡ Cute & classic'],['spooky','☾ A little spooky'],['tildeath','⚰ Till death'],['bats','🦇 Bat swarm'],['web','🕸 Haunted web'],['gothic','✦ Gothic romance'],['ghosts','◌ Little ghosts'],['moon','☾ Blood moon'],['polaroid','♡ Polaroid'],['hearts','♥ Little hearts'],['flowers','✿ Wildflowers'],['golden','✧ Golden hour'],['clean','✦ Clean up nice'],['bow','୨୧ Tied with love'],['cake','♜ Here for cake'],['none','▢ No frame']
+  // ---------- frames (keys match the existing archive) ----------
+  const SCRIPT = '"Great Vibes",cursive', SPOOK = 'Creepster,cursive', HAND = '"Caveat",cursive', GOTH = '"UnifrakturMaguntia",serif';
+  const FRAMES = [
+    { key: 'classic', name: '🤍 Just married', draw(c, t) {
+      c.save(); c.strokeStyle = 'rgba(255,255,255,.9)'; c.lineWidth = 6; c.beginPath(); c.roundRect ? c.roundRect(40, 40, W - 80, H - 80, 30) : c.rect(40, 40, W - 80, H - 80); c.stroke(); c.restore();
+      [[W - 95, 95, 15, 70], [W - 185, 150, -10, 44]].forEach(([x, y, r, s]) => emoji(c, '🤍', x, y, s, r));
+      fadeBottom(c, 420, .6);
+      text(c, 'Tyler & Julie', H - 170, { font: SCRIPT, size: 150 }); stamp(c, t);
+    }},
+    { key: 'ghosts', name: '👻 Boo-tiful', draw(c, t) {
+      emoji(c, '👻', 150, 190, 170, -14); emoji(c, '👻', W - 120, 330, 110, 12); emoji(c, '👻', W - 230, 140, 70, -6);
+      fadeBottom(c, 460, .65);
+      emoji(c, '👻', 130, H - 330, 120, 10);
+      text(c, 'Boo-tiful couple', H - 170, { font: HAND, size: 130 }); stamp(c, t);
+    }},
+    { key: 'bats', name: '🦇 Batty for you', draw(c, t) {
+      fadeTop(c, 520, '40,10,60', .7);
+      [[120,120,110,-20],[330,240,70,10],[520,110,90,-8],[720,260,60,15],[900,130,120,12],[980,380,55,-10],[220,420,50,18],[640,420,45,-14]].forEach(([x,y,s,r]) => emoji(c, '🦇', x, y, s, r));
+      fadeBottom(c, 420, .7);
+      text(c, 'Batty for these two', H - 170, { font: SPOOK, size: 110, color: '#ff8a3d' }); stamp(c, t);
+    }},
+    { key: 'tildeath', name: '💀 Till death', draw(c, t) {
+      c.save(); c.fillStyle = '#0a0a0a';
+      c.fillRect(0, 0, W, 50); c.fillRect(0, 0, 50, H); c.fillRect(W - 50, 0, 50, H); c.fillRect(0, H - 330, W, 330);
+      c.strokeStyle = '#9b111e'; c.lineWidth = 4; c.strokeRect(64, 64, W - 128, H - 330 - 28); c.restore();
+      emoji(c, '🥀', 120, H - 330, 90, -20); emoji(c, '🥀', W - 120, H - 330, 90, 20); emoji(c, '💀', W / 2, 64, 70);
+      text(c, 'Till Death Do Us Part', H - 160, { font: GOTH, size: 100, color: '#f2e6d8', shadow: false });
+      stamp(c, t, '#a89a8c', H - 70, false);
+    }},
+    { key: 'spooky', name: '🎃 Spooky cute', draw(c, t) {
+      emoji(c, '🍂', 90, 100, 90, -25); emoji(c, '🍂', W - 90, 110, 80, 30); emoji(c, '🕸️', W - 110, 260, 100, 0);
+      fadeBottom(c, 520, .7);
+      [[90,H-330,110,-12],[W-95,H-340,120,10],[250,H-300,70,6],[W-260,H-305,65,-8]].forEach(([x,y,s,r]) => emoji(c, '🎃', x, y, s, r));
+      text(c, 'Spooky & in love', H - 170, { font: SPOOK, size: 120, color: '#ff8a3d' }); stamp(c, t);
+    }},
+    { key: 'moon', name: '🌕 Blood moon', draw(c, t) {
+      c.fillStyle = 'rgba(130,0,20,.22)'; c.fillRect(0, 0, W, H);
+      c.save(); c.shadowColor = 'rgba(255,40,40,.9)'; c.shadowBlur = 80;
+      const g = c.createRadialGradient(W - 230, 260, 20, W - 230, 260, 150); g.addColorStop(0, '#ff6b4a'); g.addColorStop(1, '#8e0f12');
+      c.fillStyle = g; c.beginPath(); c.arc(W - 230, 260, 150, 0, Math.PI * 2); c.fill(); c.restore();
+      emoji(c, '🦇', W - 330, 220, 70, -12); emoji(c, '🦇', W - 140, 330, 55, 14);
+      fadeBottom(c, 420, .7);
+      text(c, 'Once in a blood moon', H - 170, { font: SCRIPT, size: 130, color: '#ffd9d0' }); stamp(c, t);
+    }},
+    { key: 'web', name: '🕷️ Caught in love', draw(c, t) {
+      web(c, 0, 0, 420, 0, 90); web(c, W, 0, 360, 90, 180);
+      c.save(); c.strokeStyle = 'rgba(255,255,255,.8)'; c.lineWidth = 3; c.beginPath(); c.moveTo(W - 300, 0); c.lineTo(W - 300, 470); c.stroke(); c.restore();
+      emoji(c, '🕷️', W - 300, 510, 90);
+      fadeBottom(c, 420, .65);
+      text(c, 'Caught in the love web', H - 170, { font: HAND, size: 120 }); stamp(c, t);
+    }},
+    { key: 'cake', name: '🎂 Here for cake', draw(c, t) {
+      fadeBottom(c, 520, .7);
+      [['🎂',110,H-330,110,-10],['🍬',260,H-300,70,15],['🍭',W-260,H-305,70,-12],['🍰',W-110,H-335,105,10]].forEach(([e,x,y,s,r]) => emoji(c, e, x, y, s, r));
+      text(c, 'Just here for the cake', H - 170, { font: HAND, size: 125 }); stamp(c, t);
+    }},
+    { key: 'polaroid', name: '📷 Polaroid', draw(c, t) {
+      c.save(); c.fillStyle = '#fbf8f2'; c.fillRect(0, 0, W, 56); c.fillRect(0, 0, 56, H); c.fillRect(W - 56, 0, 56, H); c.fillRect(0, H - 380, W, 380); c.restore();
+      text(c, 'Tyler & Julie ♡', H - 200, { font: HAND, size: 130, color: '#2a2230', shadow: false });
+      stamp(c, t, '#8a8190', H - 90, false);
+    }},
+    { key: 'none', name: 'No frame', draw(c, t) { fadeBottom(c, 200, .35); stamp(c, t); } },
   ];
-  const filters = [
-    ['original','Original'],['bw','B&W'],['hauntedbw','Haunted B&W'],['warm','Warm'],['candle','Candlelight'],['vintage','Vintage'],['glow','Soft glow'],['film','Film'],['bloodmoon','Blood moon'],['midnight','Midnight']
-  ];
 
-  function makeChips(containerId, items, kind){
-    const wrap = document.getElementById(containerId);
-    wrap.innerHTML = '';
-    items.forEach(([key,label]) => {
-      const b = document.createElement('button');
-      b.className = 'chip' + (state[kind] === key ? ' active' : '');
-      b.textContent = label;
-      b.type = 'button';
-      b.onclick = () => { state[kind] = key; makeChips(containerId, items, kind); render(); };
-      wrap.appendChild(b);
+  let frameIdx = 0;
+  const fontsReady = Promise.all(['150px "Great Vibes"', '120px Creepster', '120px Caveat', '100px UnifrakturMaguntia'].map(f => document.fonts.load(f).catch(() => {}))).then(() => document.fonts.ready);
+
+  function drawFrame(ctx, idx, time) { ctx.clearRect(0, 0, W, H); FRAMES[idx].draw(ctx, time); }
+
+  function dots(el, idx) { el.innerHTML = FRAMES.map((_, i) => `<i class="${i === idx ? 'on' : ''}"></i>`).join(''); }
+  let pillT;
+  function flashPill(el, ms = 1400) { el.textContent = FRAMES[frameIdx].name; el.classList.remove('hide'); clearTimeout(pillT); pillT = setTimeout(() => el.classList.add('hide'), ms); }
+
+  function setFrame(i) {
+    frameIdx = (i + FRAMES.length) % FRAMES.length;
+    if (current === 'camera') { drawFrame(octx, frameIdx, new Date()); dots($('camDots'), frameIdx); flashPill($('camPill')); }
+    else if (current === 'review') { compose(); dots($('revDots'), frameIdx); flashPill($('revPill')); }
+  }
+
+  function swipe(el) {
+    let sx = null, sy = 0;
+    el.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+    el.addEventListener('touchend', e => {
+      if (sx === null) return; const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy; sx = null;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) { setFrame(frameIdx + (dx < 0 ? 1 : -1)); hideHint(); }
     });
+    el.querySelectorAll('.arrow').forEach(b => b.addEventListener('click', () => { setFrame(frameIdx + Number(b.dataset.dir)); hideHint(); }));
+  }
+  swipe($('camStage')); swipe($('revStage'));
+  document.addEventListener('keydown', e => { if (current === 'welcome') return; if (e.key === 'ArrowRight') setFrame(frameIdx + 1); if (e.key === 'ArrowLeft') setFrame(frameIdx - 1); });
+
+  // position dots just above the bottom bar
+  function placeDots() {
+    const barTop = document.querySelector('#camera .bar').getBoundingClientRect().top || (innerHeight - 120);
+    ['camDots', 'revDots'].forEach(id => $(id).style.top = (Math.max(0, barTop - 22)) + 'px');
+  }
+  addEventListener('resize', placeDots);
+
+  // ---------- name screen ----------
+  const nameInput = $('nameInput');
+  try { nameInput.value = localStorage.getItem('booth_name') || ''; } catch {}
+  let guestName = '';
+  $('nameForm').addEventListener('submit', e => {
+    e.preventDefault();
+    guestName = nameInput.value.trim();
+    if (!guestName) { nameInput.focus(); toast('Type your name first'); return; }
+    try { localStorage.setItem('booth_name', guestName); } catch {}
+    nameInput.blur();
+    openCamera();
+  });
+
+  // ---------- camera ----------
+  let current = 'welcome';
+  const video = $('video'), overlay = $('overlay'), octx = overlay.getContext('2d');
+  let stream = null, facing = 'user', clockT, hintShown = false;
+
+  function hideHint() { $('hint').classList.add('hide'); }
+
+  async function openCamera() {
+    current = 'camera'; show('camera'); placeDots();
+    dots($('camDots'), frameIdx);
+    await fontsReady; drawFrame(octx, frameIdx, new Date());
+    clearInterval(clockT); let lastMin = new Date().getMinutes();
+    clockT = setInterval(() => { const n = new Date(); if (n.getMinutes() !== lastMin && current === 'camera') { lastMin = n.getMinutes(); drawFrame(octx, frameIdx, n); } }, 5000);
+    if (!hintShown) { hintShown = true; $('hint').classList.remove('hide'); setTimeout(hideHint, 3200); } else hideHint();
+    flashPill($('camPill'));
+    await startStream();
   }
 
-  function showToast(message){
-    toastEl.textContent = message;
-    toastEl.classList.add('show');
-    clearTimeout(showToast.t);
-    showToast.t = setTimeout(() => toastEl.classList.remove('show'), 2400);
-  }
-
-  function loadImageFromFile(file){
-    if(!file || !file.type.startsWith('image/')){ showToast('Please choose an image file.'); return; }
-    if(file.size > 20 * 1024 * 1024){ showToast('That photo is very large. Try one under 20 MB.'); return; }
-    if(state.objectUrl) URL.revokeObjectURL(state.objectUrl);
-    state.objectUrl = URL.createObjectURL(file);
-    const img = new Image();
-    img.onload = () => {
-      state.img = img; uploadId = crypto.randomUUID(); saved=false; clearTimeout(resetTimer);
-      emptyState.classList.add('hidden');
-      downloadBtn.disabled = false;
-      render();
-      showToast('Photo ready. Make it yours.');
-    };
-    img.onerror = () => showToast('That image could not be opened.');
-    img.src = state.objectUrl;
-  }
-
-  function setFilter(){
-    const map = {
-      original:'none',
-      bw:'grayscale(1) contrast(1.08)',
-      hauntedbw:'grayscale(1) contrast(1.34) brightness(.86)',
-      warm:'sepia(.22) saturate(1.12) contrast(1.02)',
-      candle:'sepia(.32) saturate(1.18) brightness(.97) contrast(1.04)',
-      vintage:'sepia(.34) saturate(.82) contrast(1.05) brightness(.96)',
-      glow:'brightness(1.06) saturate(.9) contrast(.94)',
-      film:'saturate(.78) contrast(1.12) brightness(.96)',
-      bloodmoon:'sepia(.28) saturate(1.38) hue-rotate(318deg) contrast(1.1) brightness(.88)',
-      midnight:'saturate(.64) contrast(1.18) brightness(.74) hue-rotate(10deg)'
-    };
-    ctx.filter = map[state.filter] || 'none';
-  }
-
-  function coverDraw(img,x,y,w,h){
-    const ir = img.width / img.height, tr = w / h;
-    let sx=0, sy=0, sw=img.width, sh=img.height;
-    if(ir > tr){ sw = img.height * tr; sx = (img.width - sw)/2; }
-    else { sh = img.width / tr; sy = (img.height - sh)/2; }
-    ctx.drawImage(img,sx,sy,sw,sh,x,y,w,h);
-  }
-
-  function serif(size, weight=500){ ctx.font = `${weight} ${size}px Georgia, 'Times New Roman', serif`; }
-  function mono(size, weight=500){ ctx.font = `${weight} ${size}px ui-monospace, SFMono-Regular, Menlo, monospace`; }
-
-  function drawGrain(x,y,w,h,amount=.04){
-    ctx.save(); ctx.globalAlpha = amount;
-    const count = Math.min(3800, Math.round((w*h)/2200));
-    ctx.fillStyle = '#000';
-    for(let i=0;i<count;i++){
-      const px=x+Math.random()*w, py=y+Math.random()*h, s=Math.random()*2.5+.3;
-      ctx.fillRect(px,py,s,s);
-    }
-    ctx.restore();
-  }
-
-  function heart(x,y,s,fill='#fff'){
-    ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.fillStyle=fill;ctx.beginPath();ctx.moveTo(0,3);ctx.bezierCurveTo(-7,-4,-13,4,0,15);ctx.bezierCurveTo(13,4,7,-4,0,3);ctx.fill();ctx.restore();
-  }
-
-  function bat(x,y,s,rot=0){
-    ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.scale(s,s);ctx.fillStyle='#120b10';ctx.beginPath();
-    ctx.moveTo(0,4);ctx.quadraticCurveTo(-8,-5,-18,2);ctx.quadraticCurveTo(-26,-5,-34,3);ctx.quadraticCurveTo(-25,16,-10,13);
-    ctx.quadraticCurveTo(-4,13,0,22);ctx.quadraticCurveTo(4,13,10,13);ctx.quadraticCurveTo(25,16,34,3);ctx.quadraticCurveTo(26,-5,18,2);ctx.quadraticCurveTo(8,-5,0,4);ctx.fill();ctx.restore();
-  }
-  function ghost(x,y,s){
-    ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.fillStyle='rgba(255,248,239,.92)';ctx.beginPath();ctx.arc(0,0,22,Math.PI,0);ctx.lineTo(22,34);ctx.quadraticCurveTo(14,27,8,34);ctx.quadraticCurveTo(0,27,-8,34);ctx.quadraticCurveTo(-14,27,-22,34);ctx.closePath();ctx.fill();
-    ctx.fillStyle='#27161e';ctx.beginPath();ctx.arc(-7,-3,3,0,Math.PI*2);ctx.arc(7,-3,3,0,Math.PI*2);ctx.fill();ctx.restore();
-  }
-  function spiderWeb(cx,cy,r,flip=1){
-    ctx.save();ctx.strokeStyle='rgba(250,241,231,.86)';ctx.lineWidth=3;ctx.globalAlpha=.9;ctx.translate(cx,cy);ctx.scale(flip,1);
-    for(let i=0;i<7;i++){const a=i*Math.PI/12;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r);ctx.stroke()}
-    for(let rr=r*.2;rr<=r;rr+=r*.18){ctx.beginPath();for(let i=0;i<=7;i++){const a=i*Math.PI/12;const x=Math.cos(a)*rr,y=Math.sin(a)*rr;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke()}
-    ctx.restore();
-  }
-  function vignette(strength=.34){
-    const g=ctx.createRadialGradient(canvas.width/2,canvas.height/2,canvas.width*.18,canvas.width/2,canvas.height/2,canvas.height*.7);
-    g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,`rgba(10,4,8,${strength})`);ctx.fillStyle=g;ctx.fillRect(0,0,canvas.width,canvas.height);
-  }
-
-  function drawFrameDecor(frame, inset){
-    const W=canvas.width,H=canvas.height;
-    ctx.save();ctx.filter='none';
-    if(frame==='none'){ctx.restore();return;}
-
-    if(frame==='classic'){
-      ctx.strokeStyle='rgba(255,255,255,.95)';ctx.lineWidth=5;ctx.strokeRect(inset,inset,W-inset*2,H-inset*2);
-      serif(48);ctx.fillStyle='#fff';ctx.textAlign='center';ctx.fillText('Tyler & Julie',W/2,110);
-      mono(22);ctx.fillText('10 · 24 · 2026',W/2,H-82);
-    }
-    if(frame==='spooky'){
-      ctx.strokeStyle='rgba(247,240,231,.88)';ctx.lineWidth=4;ctx.strokeRect(inset,inset,W-inset*2,H-inset*2);
-      serif(62);ctx.fillStyle='#f7f0e7';ctx.textAlign='center';ctx.fillText('till death, etc.',W/2,118);
-      ctx.font='62px Georgia';ctx.fillText('☾',120,H-92);ctx.fillText('☾',W-120,H-92);
-      mono(22);ctx.fillText('TYLER + JULIE · 10.24.26',W/2,H-84);
-    }
-    if(frame==='tildeath'){
-      ctx.strokeStyle='rgba(245,235,225,.93)';ctx.lineWidth=4;ctx.strokeRect(52,52,W-104,H-104);
-      ctx.strokeStyle='rgba(127,29,45,.92)';ctx.lineWidth=10;ctx.strokeRect(68,68,W-136,H-136);
-      serif(78);ctx.fillStyle='#fff4e9';ctx.textAlign='center';ctx.fillText('TILL DEATH',W/2,122);
-      serif(42);ctx.fillText('DO US PARTY',W/2,175);mono(20);ctx.fillText('TYLER + JULIE · 10.24.26',W/2,H-72);
-      ctx.font='76px Georgia';ctx.fillText('⚰',115,H-90);ctx.fillText('⚰',W-115,H-90);
-    }
-    if(frame==='bats'){
-      vignette(.22);for(let i=0;i<13;i++){const x=70+(i%5)*350+(i%2)*60,y=90+(i%4)*130;bat(x,y,1.35+(i%3)*.25,(i%4-.5)*.08)}
-      serif(62);ctx.fillStyle='#fff5ea';ctx.textAlign='center';ctx.fillText('love bites',W/2,115);mono(20);ctx.fillText('TYLER + JULIE · 10.24.26',W/2,H-74);
-    }
-    if(frame==='web'){
-      spiderWeb(0,0,470,1);spiderWeb(W,0,470,-1);spiderWeb(0,H,420,1);spiderWeb(W,H,420,-1);
-      serif(62);ctx.fillStyle='#fff5ea';ctx.textAlign='center';ctx.fillText('caught in love',W/2,118);mono(20);ctx.fillText('FOUND PHOTOGRAPHS · 10.24.26',W/2,H-72);
-    }
-    if(frame==='gothic'){
-      ctx.fillStyle='rgba(25,11,18,.28)';ctx.fillRect(0,0,W,150);ctx.fillRect(0,H-170,W,170);
-      ctx.strokeStyle='rgba(234,220,207,.92)';ctx.lineWidth=4;ctx.strokeRect(56,56,W-112,H-112);
-      ctx.strokeStyle='rgba(127,29,45,.78)';ctx.lineWidth=3;ctx.strokeRect(72,72,W-144,H-144);
-      serif(64);ctx.fillStyle='#f6eade';ctx.textAlign='center';ctx.fillText('a love to die for',W/2,105);mono(20);ctx.fillText('TYLER + JULIE · FOREVER, PROBABLY',W/2,H-91);
-      ctx.font='50px Georgia';ctx.fillText('✦  ☾  ✦',W/2,H-43);
-    }
-    if(frame==='ghosts'){
-      ghost(95,135,1.4);ghost(W-95,170,1.15);ghost(115,H-155,1.1);ghost(W-115,H-150,1.4);
-      serif(60);ctx.fillStyle='#fff6ed';ctx.textAlign='center';ctx.fillText('boo, we got married',W/2,112);mono(20);ctx.fillText('10.24.26',W/2,H-76);
-    }
-    if(frame==='moon'){
-      vignette(.32);ctx.save();ctx.fillStyle='rgba(116,19,34,.92)';ctx.beginPath();ctx.arc(W-145,145,86,0,Math.PI*2);ctx.fill();ctx.globalCompositeOperation='destination-out';ctx.beginPath();ctx.arc(W-112,120,78,0,Math.PI*2);ctx.fill();ctx.restore();
-      ctx.strokeStyle='rgba(245,233,222,.86)';ctx.lineWidth=4;ctx.strokeRect(58,58,W-116,H-116);
-      serif(64);ctx.fillStyle='#fff4ea';ctx.textAlign='left';ctx.fillText('under the blood moon',84,H-118);mono(20);ctx.fillText('TYLER + JULIE · 10.24.26',86,H-76);
-    }
-    if(frame==='polaroid'){
-      ctx.fillStyle='rgba(248,244,236,.97)';ctx.fillRect(0,0,W,96);ctx.fillRect(0,H-250,W,250);ctx.fillRect(0,0,72,H);ctx.fillRect(W-72,0,72,H);
-      serif(72);ctx.fillStyle='#1d1915';ctx.textAlign='center';ctx.fillText('found photographs',W/2,H-126);
-      mono(20);ctx.fillText('TYLER & JULIE · 10.24.26',W/2,H-74);
-    }
-    if(frame==='hearts'){
-      for(let i=0;i<18;i++){ const yy=100+i*100; heart(78,yy,1.8,i%2?'#fff':'#f3d9dc'); heart(W-78,yy,1.8,i%2?'#f3d9dc':'#fff'); }
-      serif(52);ctx.fillStyle='#fff';ctx.textAlign='center';ctx.fillText('love looks good on you',W/2,112);
-      mono(21);ctx.fillText('TYLER ♥ JULIE · 10.24.26',W/2,H-78);
-    }
-    if(frame==='flowers'){
-      const blooms=[[90,90],[W-90,105],[92,H-105],[W-95,H-96]];
-      blooms.forEach(([bx,by],bi)=>{for(let k=0;k<7;k++){ctx.save();ctx.translate(bx,by);ctx.rotate(k*Math.PI/3.5);ctx.fillStyle=bi%2?'#f5e2c7':'#fff7e9';ctx.beginPath();ctx.ellipse(0,-22,12,27,0,0,Math.PI*2);ctx.fill();ctx.restore()}ctx.fillStyle='#b58749';ctx.beginPath();ctx.arc(bx,by,10,0,Math.PI*2);ctx.fill()});
-      serif(54);ctx.fillStyle='#fff';ctx.textAlign='center';ctx.fillText('wildly in love',W/2,112);mono(21);ctx.fillText('10.24.26',W/2,H-78);
-    }
-    if(frame==='golden'){
-      const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'#f0c56d');g.addColorStop(.5,'#fff1c6');g.addColorStop(1,'#bd8a35');ctx.strokeStyle=g;ctx.lineWidth=12;ctx.strokeRect(46,46,W-92,H-92);
-      ctx.fillStyle='#ffe5a0';serif(60);ctx.textAlign='center';ctx.fillText('golden hour',W/2,120);mono(21);ctx.fillText('TYLER + JULIE · 10.24.26',W/2,H-76);
-    }
-    if(frame==='clean'){
-      ctx.fillStyle='rgba(255,255,255,.94)';ctx.fillRect(0,H-158,W,158);ctx.fillStyle='#171512';ctx.textAlign='left';serif(52);ctx.fillText('Tyler & Julie',70,H-86);mono(20);ctx.fillText('FOUND PHOTOGRAPHS · 10.24.26',72,H-48);
-    }
-    if(frame==='bow'){
-      ctx.strokeStyle='rgba(255,255,255,.9)';ctx.lineWidth=4;ctx.strokeRect(60,60,W-120,H-120);
-      serif(70);ctx.fillStyle='#fff';ctx.textAlign='center';ctx.fillText('୨୧',W/2,122);serif(50);ctx.fillText('tied with love',W/2,H-106);mono(20);ctx.fillText('10.24.26',W/2,H-70);
-    }
-    if(frame==='cake'){
-      ctx.fillStyle='rgba(255,250,243,.92)';ctx.fillRect(0,0,W,116);ctx.fillRect(0,H-130,W,130);ctx.fillStyle='#171512';ctx.textAlign='center';serif(54);ctx.fillText('HERE FOR LOVE. STAYED FOR CAKE.',W/2,76);mono(20);ctx.fillText('TYLER + JULIE · 10.24.26',W/2,H-72);
-    }
-    ctx.restore();
-  }
-
-  function wrapText(text,maxWidth,fontSize,lineHeight){
-    const words=text.trim().split(/\s+/);const lines=[];let line='';
-    serif(fontSize);
-    words.forEach(w=>{const test=line?line+' '+w:w;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=w}else line=test});
-    if(line)lines.push(line);return {lines,lineHeight};
-  }
-
-  function render(){
-    const W=canvas.width,H=canvas.height;
-    ctx.clearRect(0,0,W,H);
-    ctx.fillStyle='#e6ddd0';ctx.fillRect(0,0,W,H);
-    if(!state.img) return;
-
-    setFilter();
-    coverDraw(state.img,0,0,W,H);
-    ctx.filter='none';
-
-    if(state.filter==='glow'){
-      ctx.save();ctx.globalCompositeOperation='screen';ctx.globalAlpha=.13;ctx.fillStyle='#fff1df';ctx.fillRect(0,0,W,H);ctx.restore();
-    }
-    if(state.filter==='film') drawGrain(0,0,W,H,.055);
-    if(state.filter==='hauntedbw'){vignette(.32);drawGrain(0,0,W,H,.07)}
-    if(state.filter==='candle'){ctx.save();const g=ctx.createRadialGradient(W*.52,H*.38,40,W*.52,H*.38,H*.72);g.addColorStop(0,'rgba(255,196,112,.18)');g.addColorStop(1,'rgba(65,16,22,.18)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.restore()}
-    if(state.filter==='bloodmoon'){ctx.save();ctx.globalCompositeOperation='multiply';ctx.fillStyle='rgba(95,8,24,.18)';ctx.fillRect(0,0,W,H);ctx.restore();vignette(.28)}
-    if(state.filter==='midnight'){ctx.save();ctx.fillStyle='rgba(20,7,22,.18)';ctx.fillRect(0,0,W,H);ctx.restore();vignette(.42)}
-
-    const cap=captionInput.value.trim();
-    if(cap){
-      ctx.save();ctx.fillStyle='rgba(15,13,11,.54)';ctx.fillRect(0,H-330,W,128);ctx.fillStyle='#fff';ctx.textAlign='center';serif(54);const wrapped=wrapText(cap,W-180,54,62);wrapped.lines.slice(0,2).forEach((ln,i)=>ctx.fillText(ln,W/2,H-270+i*62));ctx.restore();
-    }
-
-    drawFrameDecor(state.frame,58);
-
-    // Tiny archival stamp
-    ctx.save();ctx.filter='none';ctx.globalAlpha=.92;ctx.fillStyle='rgba(15,13,11,.7)';ctx.fillRect(54,54,196,42);ctx.fillStyle='#fff';mono(18);ctx.textAlign='left';ctx.fillText('● FOUND / 10.24.26',70,82);ctx.restore();
-  }
-
-  function safeName(s){return (s||'guest').trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40)||'guest'}
-
-  function downloadDataUrl(dataUrl,filename){const a=document.createElement('a');a.href=dataUrl;a.download=filename;document.body.appendChild(a);a.click();a.remove();}
-
-  function makeNoteCard(){
-    const note=noteInput.value.trim();if(!note) return null;
-    const c=document.createElement('canvas');c.width=1600;c.height=2000;const x=c.getContext('2d');
-    x.fillStyle='#f6f0e7';x.fillRect(0,0,c.width,c.height);
-    x.strokeStyle='rgba(23,21,18,.25)';x.lineWidth=3;x.strokeRect(70,70,c.width-140,c.height-140);
-    x.fillStyle='#171512';x.textAlign='center';x.font='500 86px Georgia, serif';x.fillText('A note for Tyler & Julie',c.width/2,210);
-    x.font='500 24px ui-monospace, monospace';x.fillStyle='#6e665d';x.fillText('FOUND PHOTOGRAPHS · 10.24.26',c.width/2,270);
-    const max=1240;x.textAlign='left';x.fillStyle='#171512';x.font='500 52px Georgia, serif';
-    const words=note.split(/\s+/);const lines=[];let line='';for(const w of words){const test=line?line+' '+w:w;if(x.measureText(test).width>max&&line){lines.push(line);line=w}else line=test}if(line)lines.push(line);
-    const lh=72;let y=450;for(const ln of lines.slice(0,18)){x.fillText(ln,180,y);y+=lh}
-    const from=nameInput.value.trim();if(from){x.font='italic 46px Georgia, serif';x.fillText('— '+from,180,Math.min(1760,y+100));}
-    x.textAlign='center';x.font='500 24px ui-monospace, monospace';x.fillStyle='#6e665d';x.fillText('LOVE. LAUGHTER. FOUND PHOTOGRAPHS.',c.width/2,1870);
-    return c.toDataURL('image/png');
-  }
-
-  function downloadKeepsake(){
-    if(!state.img)return;
-    render();
-    const base=`tyler-julie-found-photo-${safeName(nameInput.value)}-${Date.now()}`;
-    downloadDataUrl(canvas.toDataURL('image/png'),base+'.png');
-    const note=makeNoteCard();
-    if(note) setTimeout(()=>downloadDataUrl(note,base+'-note.png'),280);
-    showToast(note?'Keepsake + note card downloaded.':'Keepsake downloaded.');
-  }
-
-  function resetAll(){
-    if(submitting)return;
-    if(state.objectUrl){URL.revokeObjectURL(state.objectUrl);state.objectUrl=null}
-    clearTimeout(resetTimer); saved=false; uploadId=null; state.imgDataUrl=''; state.img=null;state.frame='classic';state.filter='original';
-    fileInput.value='';quickCameraInput.value='';captionInput.value='';noteInput.value='';nameInput.value='';peopleInput.value='';
-    document.getElementById('captionCount').textContent='0';document.getElementById('noteCount').textContent='0';
-    emptyState.classList.remove('hidden');downloadBtn.disabled=true;makeChips('frameChips',frames,'frame');makeChips('filterChips',filters,'filter');render();showToast('Ready for another one.');
-  }
-
-  async function openCamera(){
-    if(!navigator.mediaDevices?.getUserMedia){ quickCameraInput.click(); return; }
-    try{
-      stopCamera();
-      stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:facingMode},width:{ideal:1920},height:{ideal:1080}},audio:false});
-      video.srcObject=stream;cameraModal.classList.add('open');cameraModal.setAttribute('aria-hidden','false');
-    }catch(err){
-      console.warn(err);showToast('Camera permission was blocked. Use “Choose photo” instead.');quickCameraInput.click();
-    }
-  }
-  function stopCamera(){cameraGeneration++;if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}video.srcObject=null;cameraModal.classList.remove('open');cameraModal.setAttribute('aria-hidden','true')}
-  async function flipCamera(){facingMode=facingMode==='user'?'environment':'user';await openCamera()}
-  function snapFrame(){
-    const c=document.createElement('canvas');c.width=video.videoWidth||1280;c.height=video.videoHeight||720;const x=c.getContext('2d');
-    if(facingMode==='user'){x.translate(c.width,0);x.scale(-1,1)}x.drawImage(video,0,0,c.width,c.height);
-    const data=c.toDataURL('image/jpeg',.92);const img=new Image();img.onload=()=>{state.img=img;uploadId=crypto.randomUUID();saved=false;clearTimeout(resetTimer);state.imgDataUrl=data;emptyState.classList.add('hidden');downloadBtn.disabled=false;render();flash.classList.remove('go');void flash.offsetWidth;flash.classList.add('go');stopCamera();showToast('Photo captured. Looking good.');};img.src=data;
-  }
-  async function capture(){
-    if(capturing || !video.videoWidth)return;
-    capturing=true; const generation=cameraGeneration;
+  async function startStream() {
+    stopStream();
     try {
-    if(!timerOn){snapFrame();return}
-    countdownOverlay.classList.add('show');
-    for(const n of [3,2,1]){countdownOverlay.textContent=n;await new Promise(r=>setTimeout(r,700))}
-    countdownOverlay.textContent='✦';await new Promise(r=>setTimeout(r,180));countdownOverlay.classList.remove('show');if(generation===cameraGeneration&&stream)snapFrame();
-    } finally {capturing=false;countdownOverlay.classList.remove('show');}
-  }
-
-  async function submitCollection(){
-    if(submitting||saved)return;
-    if(!state.img){showToast('Add a photo first.');return}
-    if(!nameInput.value.trim()){nameInput.focus();showToast('Add your name before submitting.');return}
-    submitting=true;updateEventMode();
-    const controls=[...document.querySelectorAll('.controls button,.controls input,.controls textarea,#resetBtn,.file-label')];
-    controls.forEach(el=>{if('disabled' in el)el.disabled=true;});
-    try{
-      render();
-      uploadId ||= crypto.randomUUID();
-      const payload={id:uploadId,photo:canvas.toDataURL('image/jpeg',.88),name:nameInput.value.trim(),people:peopleInput.value.trim(),caption:captionInput.value.trim(),note:noteInput.value.trim(),frame:state.frame,filter:state.filter};
-      const res=await fetch(SUBMISSION_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',...(authToken()?{Authorization:'Bearer '+authToken()}:{})},body:JSON.stringify(payload),signal:AbortSignal.timeout(45000)});
-      const result=await res.json();if(!res.ok||!result.saved)throw new Error(result.error||'Upload did not finish.');
-      saved=true;showToast('Photo saved! Download your keepsake now. Booth resets in 30 seconds.');
-      resetTimer=setTimeout(resetAll,30000);
-    }catch(err){showToast(err.message+' Your photo is still here. Download a backup or retry.');}
-    finally{submitting=false;controls.forEach(el=>{if('disabled' in el)el.disabled=false;});updateEventMode();}
-  }
-
-  function updateEventMode(){
-    const now=Date.now(),d=Math.max(0,EVENT_TIME-now);const day=Math.floor(d/864e5),hr=Math.floor(d%864e5/36e5),min=Math.floor(d%36e5/6e4),sec=Math.floor(d%6e4/1000);
-    document.getElementById('days').textContent=String(day).padStart(2,'0');document.getElementById('hours').textContent=String(hr).padStart(2,'0');document.getElementById('minutes').textContent=String(min).padStart(2,'0');document.getElementById('seconds').textContent=String(sec).padStart(2,'0');
-    const open=config?.configured && ((now>=config.start&&now<config.end)||!!authToken());
-    const modeTitle=document.getElementById('modeTitle'), modeCopy=document.getElementById('modeCopy'), archiveStatus=document.getElementById('archiveStatus');
-    if(open){
-      modeTitle.textContent=now<EVENT_TIME?'Couple’s test mode':'Wedding archive open';
-      modeCopy.textContent='Your finished photograph and note are saved privately for Tyler & Julie when you press the button.';
-      archiveStatus.textContent='Make a keepsake, leave a memory. Only Tyler & Julie can see the archive.';
-    }else{
-      modeTitle.textContent='Preview only';modeCopy.textContent='Your photo stays on this device. Download your keepsake; guest collection opens October 24 at 5 PM Eastern.';
-      archiveStatus.textContent=config?.configured?'Preview is ready. Guest collection opens on the wedding day.':'Keepsakes are ready. Checking the archive connection…';
+      if (!navigator.mediaDevices?.getUserMedia) throw new Error('no camera api');
+      stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: facing, width: { ideal: 1920 }, height: { ideal: 1080 } } });
+      video.srcObject = stream; video.classList.toggle('mirror', facing === 'user');
+      await video.play().catch(() => {});
+    } catch (err) {
+      console.warn(err);
+      toast('Camera blocked — tap the button to use your phone camera instead', 4000);
+      stream = null;
     }
-    submitBtn.disabled=!open||!state.img||submitting||saved;
-    submitBtn.textContent=submitting?'Saving your memory…':saved?'Saved ♡ Resetting in 30 seconds':open?'♡ Save privately for Tyler & Julie':'Wedding uploads not open yet';
+  }
+  function stopStream() { if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; } video.srcObject = null; }
 
+  $('flipBtn').addEventListener('click', () => { facing = facing === 'user' ? 'environment' : 'user'; startStream(); });
+  $('backBtn').addEventListener('click', () => { stopStream(); clearInterval(clockT); current = 'welcome'; show('welcome'); });
+
+  // raw photo (no frame) kept so frames can still be swapped on the review screen
+  const raw = document.createElement('canvas'); raw.width = W; raw.height = H; const rctx = raw.getContext('2d');
+  let shotTime = new Date(), mirrorShot = false;
+
+  function drawCover(src, sw, sh, mirror) {
+    const scale = Math.max(W / sw, H / sh), dw = sw * scale, dh = sh * scale;
+    rctx.save(); rctx.fillStyle = '#000'; rctx.fillRect(0, 0, W, H);
+    if (mirror) { rctx.translate(W, 0); rctx.scale(-1, 1); }
+    rctx.drawImage(src, (W - dw) / 2, (H - dh) / 2, dw, dh); rctx.restore();
   }
 
-  fileInput.addEventListener('change',e=>loadImageFromFile(e.target.files?.[0]));
-  quickCameraInput.addEventListener('change',e=>loadImageFromFile(e.target.files?.[0]));
-  document.getElementById('openCameraBtn').addEventListener('click',openCamera);
-  document.getElementById('quickCameraBtn').addEventListener('click',()=>quickCameraInput.click());
-  document.getElementById('closeCameraBtn').addEventListener('click',stopCamera);
-  document.getElementById('flipCameraBtn').addEventListener('click',flipCamera);
-  document.getElementById('captureBtn').addEventListener('click',capture);
-  document.getElementById('timerBtn').addEventListener('click',e=>{timerOn=!timerOn;e.currentTarget.textContent=`3s timer: ${timerOn?'On':'Off'}`});
-  downloadBtn.addEventListener('click',downloadKeepsake);resetBtn.addEventListener('click',resetAll);submitBtn.addEventListener('click',submitCollection);
-  captionInput.addEventListener('input',()=>{document.getElementById('captionCount').textContent=captionInput.value.length;render()});
-  noteInput.addEventListener('input',()=>document.getElementById('noteCount').textContent=noteInput.value.length);
-  window.addEventListener('beforeunload',e=>{stopCamera();if(submitting){e.preventDefault();e.returnValue='';}});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape')stopCamera()});
+  $('shutter').addEventListener('click', () => {
+    if (!stream || !video.videoWidth) { $('fileInput').click(); return; }
+    drawCover(video, video.videoWidth, video.videoHeight, facing === 'user');
+    shotTime = new Date();
+    const f = $('flash'); f.classList.add('go'); requestAnimationFrame(() => requestAnimationFrame(() => f.classList.remove('go')));
+    setTimeout(goReview, 180);
+  });
 
-  makeChips('frameChips',frames,'frame');makeChips('filterChips',filters,'filter');updateEventMode();setInterval(updateEventMode,1000);render();
+  $('fileInput').addEventListener('change', e => {
+    const file = e.target.files[0]; e.target.value = ''; if (!file) return;
+    const img = new Image(); const url = URL.createObjectURL(file);
+    img.onload = () => { drawCover(img, img.naturalWidth, img.naturalHeight, false); URL.revokeObjectURL(url); shotTime = new Date(); goReview(); };
+    img.onerror = () => toast("Couldn't open that photo — try again");
+    img.src = url;
+  });
+
+  // ---------- review ----------
+  const finalC = $('final'), fctx = finalC.getContext('2d');
+  const ovl2 = document.createElement('canvas'); ovl2.width = W; ovl2.height = H; const o2 = ovl2.getContext('2d');
+  let uploadId = null, sent = false, sending = false, blob = null;
+
+  function compose() {
+    fctx.drawImage(raw, 0, 0); drawFrame(o2, frameIdx, shotTime); fctx.drawImage(ovl2, 0, 0);
+    sent = false; blob = null; uploadId = crypto.randomUUID ? crypto.randomUUID() : '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, ch => (ch ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> ch / 4).toString(16));
+    finalC.toBlob(b => { blob = b; }, 'image/jpeg', .9);
+    updateSendBtn();
+  }
+
+  function goReview() {
+    stopStream(); clearInterval(clockT);
+    current = 'review'; show('review'); placeDots();
+    compose(); dots($('revDots'), frameIdx); $('revPill').classList.add('hide');
+  }
+
+  function updateSendBtn() {
+    const b = $('sendBtn'); b.classList.toggle('done', sent);
+    if (sent) { b.textContent = '✓ Sent — take another'; b.disabled = false; }
+    else if (sending) { b.textContent = 'Sending…'; b.disabled = true; }
+    else if (!canSave) { b.textContent = 'Take another'; b.disabled = false; }
+    else { b.textContent = 'Send to Tyler & Julie ♥'; b.disabled = false; }
+  }
+
+  async function send() {
+    if (sent || sending || !canSave) return sent;
+    sending = true; updateSendBtn();
+    try {
+      const payload = { id: uploadId, photo: finalC.toDataURL('image/jpeg', .85), name: guestName, people: '', caption: '', note: '', frame: FRAMES[frameIdx].key, filter: 'original' };
+      const tok = authToken();
+      const res = await fetch(UPLOAD_URL, { method: 'POST', headers: { 'Content-Type': 'application/json', ...(tok ? { Authorization: 'Bearer ' + tok } : {}) }, body: JSON.stringify(payload) });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok || !out.saved) throw new Error(out.error || 'Upload failed');
+      sent = true; toast('Sent to Tyler & Julie 🖤');
+    } catch (err) {
+      console.warn(err); toast("Didn't send — check your signal and tap Send again", 3500);
+    } finally { sending = false; updateSendBtn(); }
+    return sent;
+  }
+
+  $('sendBtn').addEventListener('click', () => {
+    if (sent || !canSave) { current = 'camera'; openCamera(); return; }
+    send();
+  });
+
+  $('retakeBtn').addEventListener('click', () => { openCamera(); });
+
+  $('downloadBtn').addEventListener('click', async () => {
+    const getBlob = blob ? Promise.resolve(blob) : new Promise(r => finalC.toBlob(r, 'image/jpeg', .9));
+    const b = await getBlob;
+    const fname = `tyler-julie-${shotTime.toISOString().slice(0, 19).replace(/[:T]/g, '-')}.jpg`;
+    const file = new File([b], fname, { type: 'image/jpeg' });
+    send(); // keeping a photo also sends it to the couple
+    if (navigator.canShare && navigator.canShare({ files: [file] }) && /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
+      try { await navigator.share({ files: [file] }); return; } catch (e) { if (e.name === 'AbortError') return; }
+    }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = fname;
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  });
+
+  document.addEventListener('visibilitychange', () => { if (document.hidden) stopStream(); else if (current === 'camera') startStream(); });
 })();
 </script>
 </body>
