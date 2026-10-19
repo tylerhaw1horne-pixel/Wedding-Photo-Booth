@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "builds": [
+    {"src":"server.js","use":"@vercel/node"},
+    {"src":"index.html","use":"@vercel/static"},
+    {"src":"archive.html","use":"@vercel/static"}
+  ],
+  "routes": [
+    {"src":"/api/.*","dest":"/server.js"},
+    {"src":"/archive/?","dest":"/archive.html"},
+    {"src":"/","dest":"/index.html"},
+    {"src":"/Found_Photographs_Photo_Booth_CREEPY_ROMANTIC.html","dest":"/index.html"}
+  ]
+}
